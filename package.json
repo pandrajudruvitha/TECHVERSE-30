@@ -1,0 +1,11 @@
+{
+  "name": "techverse-30",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Foundation for TECHVERSE 30",
+  "scripts": {
+    "dev:web": "npm --prefix apps/web run dev",
+    "build:web": "npm --prefix apps/web run build",
+    "lint:web": "npm --prefix apps/web run lint"
+  }
+}
