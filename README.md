@@ -2,6 +2,10 @@
 
 An integrated technology workspace under staged development. Stage 1 established the project structure, service boundaries, local configuration, and a runnable web/API foundation. Stage 2 adds the responsive dashboard and design system, interactive 3D technology map, searchable and filterable directory of 30 planned domains, and live API health indicator. These domains are a platform catalog, not finished module tools; persistence, authentication, and AI arrive in later stages.
 
+## Dashboard preview
+
+![TECHVERSE 30 dashboard showing the technology directory and connected API](apps/web/public/dashboard-screenshot.png)
+
 ## Architecture
 
 ```text
