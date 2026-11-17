@@ -61,7 +61,7 @@ export const technologyModules: TechnologyModule[] = entries.map(
     shortName,
     category,
     icon,
-    stage: 4 + Math.floor(index / 10),
+    stage: index === 0 ? 4 : index <= 15 ? 5 : 6,
   }),
 );
 

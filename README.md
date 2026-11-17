@@ -1,6 +1,6 @@
 # TECHVERSE 30
 
-An integrated technology workspace under staged development. Stage 1 established the project structure, service boundaries, local configuration, and a runnable web/API foundation. Stage 2 adds the responsive dashboard and design system, interactive 3D technology map, searchable and filterable directory of 30 planned domains, and live API health indicator. These domains are a platform catalog, not finished module tools; persistence, authentication, and AI arrive in later stages.
+An integrated technology workspace under staged development. Stages 1–4 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, and a private, authenticated IT asset inventory. Stage 5 is underway with the Software Development module's browser-local code snippet library. Other technology domains remain a catalog until their tools are implemented.
 
 ## Dashboard preview
 
@@ -17,7 +17,7 @@ Browser
               └── Redis (cache/queue foundation; local service scaffold)
 ```
 
-The frontend and API are separate deployable services. The FastAPI service owns server-side integrations and secrets; browser code must never receive provider credentials. PostgreSQL and Redis are optional local infrastructure declared in `infra/docker-compose.yml`. Stage 3 adds PostgreSQL-backed accounts, Alembic migrations, and short-lived bearer tokens. Later stages can add module packages and the AI orchestration layer without coupling those concerns to the UI.
+The frontend and API are separate deployable services. The FastAPI service owns server-side integrations and secrets; browser code must never receive provider credentials. PostgreSQL and Redis are optional local infrastructure declared in `infra/docker-compose.yml`. Stage 4 stores assets in PostgreSQL and scopes every inventory operation to the signed-in user. The Stage 5 snippet library stores code only in the current browser and does not execute it or send it to the API.
 
 ## Repository layout
 
@@ -27,17 +27,18 @@ apps/
     app/
       main.py              FastAPI app and liveness endpoint
       schemas.py           Typed response contracts exposed through OpenAPI
+      assets.py            Authenticated IT asset inventory endpoints
       auth.py              Registration, login, and current-user endpoints
       database.py          SQLAlchemy database session and base model
       models.py            Persisted user account
       security.py          Password hashing and signed access tokens
-    alembic/                Versioned database migrations
+    alembic/                Versioned account and asset migrations
     tests/                  API authentication tests
     requirements.txt
   web/                     Next.js App Router application
     src/
       app/                 Dashboard route, layout, and design system
-      components/          Interactive React Three Fiber universe
+      components/          3D universe, asset inventory, and developer snippet library
       data/                Typed directory of 30 technology domains
 infra/
   docker-compose.yml       Local PostgreSQL and Redis services
@@ -88,13 +89,16 @@ Requirements: Node.js 20.9+, npm, and Python 3.10+.
 
 6. Visit `http://localhost:3000`; the dashboard checks `NEXT_PUBLIC_API_BASE_URL/health` in the browser. The default local API URL is `http://127.0.0.1:8000`. Check API readiness at `http://127.0.0.1:8000/health` and interactive API docs at `http://127.0.0.1:8000/docs`.
 
-### Stage 3 authentication API
+### Authentication and IT asset inventory
 
 - `POST /auth/register` creates an account; passwords must be 12–128 characters and are stored as Argon2 hashes.
 - `POST /auth/login` accepts a JSON email/password pair and returns a 30-minute JWT bearer token.
 - `GET /auth/me` returns the authenticated account and requires `Authorization: Bearer <token>`.
+- `GET /assets` lists the signed-in user's assets.
+- `POST /assets` creates an asset; asset tags are unique per account.
+- `PATCH /assets/{id}` updates an owned asset, and `DELETE /assets/{id}` removes it.
 
-Set `DATABASE_URL` and a random `JWT_SECRET` before using auth. The health endpoint remains available if these are not configured. Apply schema changes with Alembic; the API does not create tables automatically. Run API tests with `.\.venv\Scripts\python.exe -m pytest apps\api\tests`.
+Open **IT management** in the dashboard to register or sign in and manage assets. Asset data is private to the account, and the short-lived access token stays in browser memory. Set `DATABASE_URL` and a random `JWT_SECRET` before using authentication or inventory. The health endpoint remains available if these are not configured. Apply schema changes with Alembic; the API does not create tables automatically. Run API tests with `.\.venv\Scripts\python.exe -m pytest apps\api\tests`.
 
 ### Two-hour local checks
 
@@ -116,15 +120,21 @@ Copy `.env.example` to `.env`, replace the local-only database password, then st
 docker compose --env-file .env -f infra\docker-compose.yml up -d
 ```
 
-Do not use the example credentials outside local development. No schema or migration is applied yet.
+Do not use the example credentials outside local development. Apply migrations with `.\.venv\Scripts\alembic.exe -c apps\api\alembic.ini upgrade head` before using authentication or the asset inventory.
 
-## Delivery stages
+## Delivery stages and status
 
-1. Project initialization and architecture (complete)
-2. Design system and 3D dashboard (complete)
-3. Authentication and database (complete)
-4–6. Technology modules 1–30
-7. Central AI engine
-8. Cross-module integrations and automation
-9. Security, testing, and optimization
-10. Deployment and documentation
+Stages 1–4 are implemented in this repository. Stage 5 is in progress; Stages 6–10 are planned. The technology directory is otherwise a catalog, not a set of completed tools. A stage should be marked complete only after its deliverables are implemented and verified.
+
+| Stage | Scope | Status |
+| --- | --- | --- |
+| 1. Project foundation | Repository structure, frontend/API boundaries, local configuration, and runnable web/API services. | Complete |
+| 2. Dashboard and design system | Responsive dashboard, interactive 3D technology map, searchable/filterable directory of 30 domains, and API health indicator. | Complete |
+| 3. Accounts and database | Database-backed registration and login, password hashing, Alembic migrations, and signed bearer-token authentication. | Complete |
+| 4. IT management | Authenticated, user-scoped asset inventory with create, list, update, and delete operations. | Complete |
+| 5. Technology modules 2–16 | Build usable module experiences for software development, AI, generative AI, machine learning, deep learning, data science, data analytics, big data, cloud computing, cybersecurity, information security, blockchain, web development, mobile development, and game development. Software Development currently provides a browser-local code snippet library; the other modules remain planned. | In progress |
+| 6. Technology modules 17–30 | Build usable module experiences for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. | Planned |
+| 7. Central AI engine | Add a server-side AI orchestration layer with provider integrations, configuration, and safe handling of credentials. | Planned |
+| 8. Integrations and automation | Connect modules through defined interfaces and add cross-module workflows and automation. | Planned |
+| 9. Security, testing, and optimization | Extend security controls and automated coverage across the platform; measure and improve reliability and performance. | Planned |
+| 10. Deployment and documentation | Define production deployment, environment configuration, operational guidance, and user-facing documentation. | Planned |

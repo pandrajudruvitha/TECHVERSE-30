@@ -43,6 +43,8 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import AssetInventory from "@/components/AssetInventory";
+import DeveloperWorkspace from "@/components/DeveloperWorkspace";
 import {
   useCallback,
   useEffect,
@@ -139,10 +141,10 @@ function EmptyProjects() {
         <HardDrive size={19} aria-hidden="true" />
       </span>
       <div>
-        <p>Persistence is not connected</p>
-        <span>Database-backed project workspaces arrive in Stage 3.</span>
+        <p>Project workspaces are not available yet</p>
+        <span>Use the software development module to save code snippets locally.</span>
       </div>
-      <span className="coming-label">COMING UP</span>
+      <span className="coming-label">PLANNED</span>
     </div>
   );
 }
@@ -315,13 +317,17 @@ export default function Home() {
             </button>
             <div
               className="nav-link nav-link-upcoming"
-              title={sidebarCollapsed ? "Projects arrive in Stage 3" : undefined}
+              title={
+                sidebarCollapsed
+                  ? "Project workspaces are not available yet"
+                  : undefined
+              }
             >
               <BriefcaseBusiness size={17} aria-hidden="true" />
               {!sidebarCollapsed && (
                 <>
                   <span>Projects</span>
-                  <span className="nav-lock">S3</span>
+                  <span className="nav-lock">SOON</span>
                 </>
               )}
             </div>
@@ -378,8 +384,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 2 of 10</strong>
-                <small>Dashboard & design system</small>
+                <strong>Stage 5 of 10</strong>
+                <small>Software development · code snippets</small>
               </span>
             )}
           </div>
@@ -414,7 +420,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 02</span>
+            <span className="topbar-stage">STAGE 05</span>
           </div>
 
           <div className="topbar-actions">
@@ -483,8 +489,8 @@ export default function Home() {
                         <Sparkles size={14} />
                       </span>
                       <span>
-                        <strong>Dashboard in progress</strong>
-                        <small>Stage 2 · visual system and module directory</small>
+                        <strong>IT management available</strong>
+                        <small>Stage 4 · authenticated asset inventory</small>
                       </span>
                     </div>
                     <p className="notice-footnote">
@@ -558,9 +564,9 @@ export default function Home() {
               <span className="metric-icon metric-icon-orange">
                 <ShieldCheck size={16} />
               </span>
-              <span className="metric-label">Identity & access</span>
-              <strong>Stage 3</strong>
-              <span className="metric-caption">Authentication is planned next</span>
+              <span className="metric-label">IT asset inventory</span>
+              <strong>Available</strong>
+              <span className="metric-caption">Authenticated and API-backed</span>
             </article>
           </section>
 
@@ -723,7 +729,7 @@ export default function Home() {
                   <span className="panel-eyebrow">PLATFORM ROADMAP</span>
                   <h2>Project workspaces</h2>
                 </div>
-                <span className="subtle-count">STAGE 03</span>
+                <span className="subtle-count">PLANNED</span>
               </div>
               <EmptyProjects />
               <div className="assistant-callout">
@@ -802,8 +808,11 @@ export default function Home() {
                   <span>
                     <strong>{selectedModule.name}</strong>
                     <small>
-                      Planned for Stage {selectedModule.stage} · dedicated tools
-                      and persistence are not available yet.
+                      {selectedModule.id === "information-technology-management"
+                        ? "Available now · authenticated asset inventory with private API-backed storage."
+                        : selectedModule.id === "software-development"
+                          ? "Available now · save and copy reusable code snippets in this browser."
+                          : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
                   </span>
                   <button
@@ -816,6 +825,13 @@ export default function Home() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {selectedModule?.id === "information-technology-management" && (
+              <AssetInventory />
+            )}
+            {selectedModule?.id === "software-development" && (
+              <DeveloperWorkspace />
+            )}
 
             {visibleModules.length > 0 ? (
               <motion.div layout className="module-grid">
@@ -886,26 +902,31 @@ export default function Home() {
                 <span>Foundation</span>
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
-              <span className="roadmap-step roadmap-step-current">
-                <i><span /></i>
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
                 <span>Dashboard</span>
               </span>
-              <span className="roadmap-connector" />
-              <span className="roadmap-step">
-                <i>03</i>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
                 <span>Identity</span>
               </span>
-              <span className="roadmap-connector" />
-              <span className="roadmap-step roadmap-step-future">
-                <i>04—06</i>
-                <span>30 modules</span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>IT management</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-current" aria-current="step">
+                <i><span /></i>
+                <span>Developer tools</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 02 · DESIGN SYSTEM & DASHBOARD</span>
+            <span>STAGE 05 IN PROGRESS · SOFTWARE DEVELOPMENT</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>
