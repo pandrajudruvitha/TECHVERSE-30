@@ -386,7 +386,7 @@ export default function Home() {
             {!sidebarCollapsed && (
               <span>
                 <strong>Stage 6 of 10</strong>
-                <small>Automation · workflow ROI planning</small>
+                <small>Quantum computing · circuit workload planning</small>
               </span>
             )}
           </div>
@@ -816,7 +816,8 @@ export default function Home() {
                           : selectedModule.stage === 5 ||
                               selectedModule.id === "internet-of-things" ||
                               selectedModule.id === "robotics" ||
-                              selectedModule.id === "automation"
+                              selectedModule.id === "automation" ||
+                              selectedModule.id === "quantum-computing"
                             ? "Available now · use this module's interactive tools locally in your browser."
                             : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
@@ -842,7 +843,8 @@ export default function Home() {
               selectedModule.id !== "software-development") ||
               selectedModule?.id === "internet-of-things" ||
               selectedModule?.id === "robotics" ||
-              selectedModule?.id === "automation") && (
+              selectedModule?.id === "automation" ||
+              selectedModule?.id === "quantum-computing") && (
                 <ModuleWorkbench
                   key={selectedModule.id}
                   module={selectedModule}
@@ -948,16 +950,21 @@ export default function Home() {
                 <span>Robotics</span>
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>Automation</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
               <span className="roadmap-step roadmap-step-current" aria-current="step">
                 <i><span /></i>
-                <span>Automation</span>
+                <span>Quantum computing</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 06 IN PROGRESS · AUTOMATION WORKFLOW PLANNING</span>
+            <span>STAGE 06 IN PROGRESS · QUANTUM CIRCUIT PLANNING</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

@@ -561,6 +561,53 @@ const tools: Record<string, Tool> = {
       ].join("\n");
     },
   },
+  "quantum-computing": {
+    title: "Quantum circuit execution planner",
+    description:
+      "Estimate gate-layer runtime and gate operations for a circuit workload. This is a rough planning estimate, not a simulator or hardware benchmark.",
+    fields: [
+      numberField("qubits", "Qubits in the circuit", "8", 1, undefined, 1),
+      numberField("gates", "Gate operations per circuit", "100", 1, undefined, 1),
+      numberField("depth", "Sequential circuit layers", "20", 1, undefined, 1),
+      numberField("shots", "Circuit shots", "1000", 1, undefined, 1),
+      numberField("gateTime", "Average gate time (microseconds)", "1", 0.1, undefined, 0.1),
+    ],
+    calculate: (values) => {
+      const qubits = value(values, "qubits");
+      const gates = value(values, "gates");
+      const depth = value(values, "depth");
+      const shots = value(values, "shots");
+      const gateTime = value(values, "gateTime");
+      const counts = [qubits, gates, depth, shots];
+      if (
+        !counts.every((item) => Number.isInteger(item) && item > 0) ||
+        !Number.isFinite(gateTime) ||
+        gateTime <= 0
+      ) {
+        return "Enter positive whole-number qubit, gate, layer, and shot counts, plus a positive finite gate time.";
+      }
+      if (depth > gates) {
+        return "Circuit depth cannot exceed the number of gate operations.";
+      }
+
+      const gateOperations = gates * shots;
+      const runtimeSeconds = depth * gateTime * shots / 1e6;
+      const qubitTime = qubits * runtimeSeconds;
+      if (![gateOperations, runtimeSeconds, qubitTime].every(Number.isFinite)) {
+        return "These values are too large to estimate safely.";
+      }
+
+      return [
+        `Qubit register: ${number(qubits, 0)} qubits`,
+        `Circuit: ${number(gates, 0)} gate operations across ${number(depth, 0)} sequential layers`,
+        `Shots: ${number(shots, 0)}`,
+        `Total gate operations: ${number(gateOperations, 0)}`,
+        `Estimated execution time: ${number(runtimeSeconds)} seconds`,
+        `Estimated qubit-time: ${number(qubitTime)} qubit-seconds`,
+        "Estimate assumes gates within each layer run in parallel and excludes state preparation, readout, routing, queueing, and error correction.",
+      ].join("\n");
+    },
+  },
 };
 
 function initialValues(fields: Field[]): Record<string, string> {
