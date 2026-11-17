@@ -47,6 +47,12 @@ const value = (values: Record<string, string>, id: string) =>
   Number(values[id]);
 const number = (input: number, digits = 2) =>
   new Intl.NumberFormat(undefined, { maximumFractionDigits: digits }).format(input);
+const usd = (input: number) =>
+  new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(input);
 const unavailable = "Enter valid values in all required fields.";
 
 const tools: Record<string, Tool> = {
@@ -494,6 +500,64 @@ const tools: Record<string, Tool> = {
         `Wheel rotations: ${number(wheelRotations)}`,
         `Motor rotations: ${number(wheelRotations * reduction)}`,
         "Estimate excludes acceleration, wheel slip, load, and controller limits.",
+      ].join("\n");
+    },
+  },
+  automation: {
+    title: "Workflow automation ROI planner",
+    description:
+      "Estimate labor time and cost savings for a repeatable workflow. This planner does not connect to or automate external systems.",
+    fields: [
+      numberField("tasksPerDay", "Tasks per workday", "25", 0, undefined, 1),
+      numberField("minutesPerTask", "Manual minutes per task", "8", 0, undefined, 0.1),
+      numberField("coverage", "Tasks handled by automation (%)", "80", 0, 100, 1),
+      numberField("hourlyCost", "Labor cost (USD / hour)", "35", 0, undefined, 0.01),
+      numberField("setupHours", "Estimated setup effort (hours)", "12", 0, undefined, 0.5),
+      numberField("workdays", "Workdays per month", "22", 1, 31, 1),
+    ],
+    calculate: (values) => {
+      const tasksPerDay = value(values, "tasksPerDay");
+      const minutesPerTask = value(values, "minutesPerTask");
+      const coverage = value(values, "coverage");
+      const hourlyCost = value(values, "hourlyCost");
+      const setupHours = value(values, "setupHours");
+      const workdays = value(values, "workdays");
+      const inputs = [
+        tasksPerDay,
+        minutesPerTask,
+        coverage,
+        hourlyCost,
+        setupHours,
+        workdays,
+      ];
+      if (!inputs.every(Number.isFinite) || inputs.some((item) => item < 0)) {
+        return unavailable;
+      }
+      if (coverage > 100 || workdays < 1 || workdays > 31) {
+        return "Automation coverage must be at most 100%, and workdays per month must be from 1 to 31.";
+      }
+
+      const hoursSavedPerDay = tasksPerDay * minutesPerTask * coverage / 100 / 60;
+      const dailySavings = hoursSavedPerDay * hourlyCost;
+      const monthlySavings = dailySavings * workdays;
+      const setupCost = setupHours * hourlyCost;
+      if (![hoursSavedPerDay, dailySavings, monthlySavings, setupCost].every(Number.isFinite)) {
+        return "These values are too large to estimate safely.";
+      }
+
+      const payback = setupCost === 0
+        ? "No setup cost"
+        : dailySavings === 0
+          ? "No payback at the current inputs"
+          : `${number(setupCost / dailySavings)} working days`;
+      return [
+        `Tasks automated per workday: ${number(tasksPerDay * coverage / 100, 1)}`,
+        `Labor time saved per workday: ${number(hoursSavedPerDay)} hours`,
+        `Estimated labor savings per month: ${usd(monthlySavings)}`,
+        `Estimated one-time setup labor cost: ${usd(setupCost)}`,
+        `Estimated payback: ${payback}`,
+        `First-month savings after setup labor: ${usd(monthlySavings - setupCost)}`,
+        "Estimate excludes software costs, maintenance, exceptions, and process redesign.",
       ].join("\n");
     },
   },
