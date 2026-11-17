@@ -432,6 +432,37 @@ const tools: Record<string, Tool> = {
       ].join("\n");
     },
   },
+  "internet-of-things": {
+    title: "IoT telemetry capacity planner",
+    description:
+      "Estimate message rate and retained payload volume for a fleet of connected devices.",
+    fields: [
+      numberField("devices", "Connected devices", "500"),
+      numberField("messages", "Messages per device / day", "1440"),
+      numberField("payload", "Average payload (bytes)", "512"),
+      numberField("retention", "Retention (days)", "30"),
+    ],
+    calculate: (values) => {
+      const devices = value(values, "devices");
+      const messages = value(values, "messages");
+      const payload = value(values, "payload");
+      const retention = value(values, "retention");
+      if (![devices, messages, payload, retention].every(
+        (item) => Number.isFinite(item) && item >= 0,
+      )) {
+        return unavailable;
+      }
+      const dailyMessages = devices * messages;
+      const dailyGigabytes = dailyMessages * payload / 1e9;
+      return [
+        `Messages per day: ${number(dailyMessages, 0)}`,
+        `Average message rate: ${number(dailyMessages / 86400)} messages/second`,
+        `Payload volume: ${number(dailyGigabytes)} GB/day`,
+        `Retained payload: ${number(dailyGigabytes * retention / 1000)} TB`,
+        "Estimate excludes protocol overhead, indexes, replication, and retries.",
+      ].join("\n");
+    },
+  },
 };
 
 function initialValues(fields: Field[]): Record<string, string> {
@@ -488,7 +519,9 @@ export default function ModuleWorkbench({
     <section className="module-workbench" aria-labelledby="module-workbench-title">
       <div className="module-workbench-heading">
         <div>
-          <span className="panel-eyebrow">STAGE 05 · {module.name.toUpperCase()}</span>
+          <span className="panel-eyebrow">
+            STAGE {String(module.stage).padStart(2, "0")} · {module.name.toUpperCase()}
+          </span>
           <h3 id="module-workbench-title">{tool.title}</h3>
           <p>{tool.description}</p>
         </div>

@@ -385,8 +385,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 5 of 10 · Complete</strong>
-                <small>Technology modules 2–16</small>
+                <strong>Stage 6 of 10</strong>
+                <small>Internet of Things · telemetry planning</small>
               </span>
             )}
           </div>
@@ -421,7 +421,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 05</span>
+            <span className="topbar-stage">STAGE 06</span>
           </div>
 
           <div className="topbar-actions">
@@ -813,7 +813,8 @@ export default function Home() {
                         ? "Available now · authenticated asset inventory with private API-backed storage."
                         : selectedModule.id === "software-development"
                           ? "Available now · save and copy reusable code snippets in this browser."
-                          : selectedModule.stage === 5
+                          : selectedModule.stage === 5 ||
+                              selectedModule.id === "internet-of-things"
                             ? "Available now · use this module's interactive tools locally in your browser."
                             : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
@@ -835,8 +836,9 @@ export default function Home() {
             {selectedModule?.id === "software-development" && (
               <DeveloperWorkspace />
             )}
-            {selectedModule?.stage === 5 &&
-              selectedModule.id !== "software-development" && (
+            {((selectedModule?.stage === 5 &&
+              selectedModule.id !== "software-development") ||
+              selectedModule?.id === "internet-of-things") && (
                 <ModuleWorkbench
                   key={selectedModule.id}
                   module={selectedModule}
@@ -931,12 +933,17 @@ export default function Home() {
                 <i><Check size={10} /></i>
                 <span>Developer tools</span>
               </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-current" aria-current="step">
+                <i><span /></i>
+                <span>IoT tools</span>
+              </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 05 COMPLETE · TECHNOLOGY MODULES 2–16</span>
+            <span>STAGE 06 IN PROGRESS · IOT TELEMETRY PLANNING</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>
