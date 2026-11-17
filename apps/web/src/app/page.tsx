@@ -386,7 +386,7 @@ export default function Home() {
             {!sidebarCollapsed && (
               <span>
                 <strong>Stage 6 of 10</strong>
-                <small>Internet of Things · telemetry planning</small>
+                <small>Robotics · wheel-motion planning</small>
               </span>
             )}
           </div>
@@ -814,7 +814,8 @@ export default function Home() {
                         : selectedModule.id === "software-development"
                           ? "Available now · save and copy reusable code snippets in this browser."
                           : selectedModule.stage === 5 ||
-                              selectedModule.id === "internet-of-things"
+                              selectedModule.id === "internet-of-things" ||
+                              selectedModule.id === "robotics"
                             ? "Available now · use this module's interactive tools locally in your browser."
                             : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
@@ -838,7 +839,8 @@ export default function Home() {
             )}
             {((selectedModule?.stage === 5 &&
               selectedModule.id !== "software-development") ||
-              selectedModule?.id === "internet-of-things") && (
+              selectedModule?.id === "internet-of-things" ||
+              selectedModule?.id === "robotics") && (
                 <ModuleWorkbench
                   key={selectedModule.id}
                   module={selectedModule}
@@ -934,16 +936,21 @@ export default function Home() {
                 <span>Developer tools</span>
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>IoT tools</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
               <span className="roadmap-step roadmap-step-current" aria-current="step">
                 <i><span /></i>
-                <span>IoT tools</span>
+                <span>Robotics</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 06 IN PROGRESS · IOT TELEMETRY PLANNING</span>
+            <span>STAGE 06 IN PROGRESS · ROBOTICS MOTION PLANNING</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

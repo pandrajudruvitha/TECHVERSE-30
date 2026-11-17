@@ -463,6 +463,40 @@ const tools: Record<string, Tool> = {
       ].join("\n");
     },
   },
+  robotics: {
+    title: "Wheel motion planner",
+    description:
+      "Estimate wheel speed and travel time from motor speed, reduction ratio, and wheel diameter. This does not control hardware.",
+    fields: [
+      numberField("diameter", "Wheel diameter (mm)", "100", 0.1, undefined, 0.1),
+      numberField("motorRpm", "Motor speed (RPM)", "300", 0.1, undefined, 0.1),
+      numberField("reduction", "Gear reduction ratio", "30", 0.1, undefined, 0.1),
+      numberField("distance", "Travel distance (m)", "10", 0.1, undefined, 0.1),
+    ],
+    calculate: (values) => {
+      const diameter = value(values, "diameter") / 1000;
+      const motorRpm = value(values, "motorRpm");
+      const reduction = value(values, "reduction");
+      const distance = value(values, "distance");
+      if (![diameter, motorRpm, reduction, distance].every(
+        (item) => Number.isFinite(item) && item > 0,
+      )) {
+        return "Enter positive finite values for wheel size, motor speed, gear ratio, and distance.";
+      }
+      const wheelRpm = motorRpm / reduction;
+      const circumference = Math.PI * diameter;
+      const speed = circumference * wheelRpm / 60;
+      const wheelRotations = distance / circumference;
+      return [
+        `Wheel speed: ${number(wheelRpm)} RPM`,
+        `Linear speed: ${number(speed)} m/s`,
+        `Estimated travel time: ${number(distance / speed)} seconds`,
+        `Wheel rotations: ${number(wheelRotations)}`,
+        `Motor rotations: ${number(wheelRotations * reduction)}`,
+        "Estimate excludes acceleration, wheel slip, load, and controller limits.",
+      ].join("\n");
+    },
+  },
 };
 
 function initialValues(fields: Field[]): Record<string, string> {
