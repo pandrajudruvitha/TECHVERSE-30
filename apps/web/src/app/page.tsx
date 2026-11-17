@@ -45,6 +45,7 @@ import {
 } from "lucide-react";
 import AssetInventory from "@/components/AssetInventory";
 import DeveloperWorkspace from "@/components/DeveloperWorkspace";
+import ModuleWorkbench from "@/components/ModuleWorkbench";
 import {
   useCallback,
   useEffect,
@@ -384,8 +385,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 5 of 10</strong>
-                <small>Software development · code snippets</small>
+                <strong>Stage 5 of 10 · Complete</strong>
+                <small>Technology modules 2–16</small>
               </span>
             )}
           </div>
@@ -812,7 +813,9 @@ export default function Home() {
                         ? "Available now · authenticated asset inventory with private API-backed storage."
                         : selectedModule.id === "software-development"
                           ? "Available now · save and copy reusable code snippets in this browser."
-                          : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
+                          : selectedModule.stage === 5
+                            ? "Available now · use this module's interactive tools locally in your browser."
+                            : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
                   </span>
                   <button
@@ -832,6 +835,13 @@ export default function Home() {
             {selectedModule?.id === "software-development" && (
               <DeveloperWorkspace />
             )}
+            {selectedModule?.stage === 5 &&
+              selectedModule.id !== "software-development" && (
+                <ModuleWorkbench
+                  key={selectedModule.id}
+                  module={selectedModule}
+                />
+              )}
 
             {visibleModules.length > 0 ? (
               <motion.div layout className="module-grid">
@@ -917,8 +927,8 @@ export default function Home() {
                 <span>IT management</span>
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
-              <span className="roadmap-step roadmap-step-current" aria-current="step">
-                <i><span /></i>
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
                 <span>Developer tools</span>
               </span>
             </div>
@@ -926,7 +936,7 @@ export default function Home() {
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 05 IN PROGRESS · SOFTWARE DEVELOPMENT</span>
+            <span>STAGE 05 COMPLETE · TECHNOLOGY MODULES 2–16</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

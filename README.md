@@ -1,6 +1,6 @@
 # TECHVERSE 30
 
-An integrated technology workspace under staged development. Stages 1–4 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, and a private, authenticated IT asset inventory. Stage 5 is underway with the Software Development module's browser-local code snippet library. Other technology domains remain a catalog until their tools are implemented.
+An integrated technology workspace under staged development. Stages 1–5 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, a private, authenticated IT asset inventory, and first-pass tools for technology modules 2–16. Later domains remain a catalog until their tools are implemented.
 
 ## Dashboard preview
 
@@ -17,7 +17,7 @@ Browser
               └── Redis (cache/queue foundation; local service scaffold)
 ```
 
-The frontend and API are separate deployable services. The FastAPI service owns server-side integrations and secrets; browser code must never receive provider credentials. PostgreSQL and Redis are optional local infrastructure declared in `infra/docker-compose.yml`. Stage 4 stores assets in PostgreSQL and scopes every inventory operation to the signed-in user. The Stage 5 snippet library stores code only in the current browser and does not execute it or send it to the API.
+The frontend and API are separate deployable services. The FastAPI service owns server-side integrations and secrets; browser code must never receive provider credentials. PostgreSQL and Redis are optional local infrastructure declared in `infra/docker-compose.yml`. Stage 4 stores assets in PostgreSQL and scopes every inventory operation to the signed-in user. Stage 5 module tools run locally in the browser; snippets are not executed, and tool inputs are not sent to the API.
 
 ## Repository layout
 
@@ -38,7 +38,7 @@ apps/
   web/                     Next.js App Router application
     src/
       app/                 Dashboard route, layout, and design system
-      components/          3D universe, asset inventory, and developer snippet library
+      components/          3D universe, asset inventory, and browser-local module workbenches
       data/                Typed directory of 30 technology domains
 infra/
   docker-compose.yml       Local PostgreSQL and Redis services
@@ -124,7 +124,7 @@ Do not use the example credentials outside local development. Apply migrations w
 
 ## Delivery stages and status
 
-Stages 1–4 are implemented in this repository. Stage 5 is in progress; Stages 6–10 are planned. The technology directory is otherwise a catalog, not a set of completed tools. A stage should be marked complete only after its deliverables are implemented and verified.
+Stages 1–5 are implemented in this repository. Stages 6–10 are planned. The technology directory is otherwise a catalog, not a set of completed tools. A stage should be marked complete only after its deliverables are implemented and verified.
 
 | Stage | Scope | Status |
 | --- | --- | --- |
@@ -132,7 +132,7 @@ Stages 1–4 are implemented in this repository. Stage 5 is in progress; Stages 
 | 2. Dashboard and design system | Responsive dashboard, interactive 3D technology map, searchable/filterable directory of 30 domains, and API health indicator. | Complete |
 | 3. Accounts and database | Database-backed registration and login, password hashing, Alembic migrations, and signed bearer-token authentication. | Complete |
 | 4. IT management | Authenticated, user-scoped asset inventory with create, list, update, and delete operations. | Complete |
-| 5. Technology modules 2–16 | Build usable module experiences for software development, AI, generative AI, machine learning, deep learning, data science, data analytics, big data, cloud computing, cybersecurity, information security, blockchain, web development, mobile development, and game development. Software Development currently provides a browser-local code snippet library; the other modules remain planned. | In progress |
+| 5. Technology modules 2–16 | Browser-local MVP tools: code snippets; AI use-case brief; generative-AI prompt composer; classification metrics; dense-layer parameter estimator; descriptive statistics; conversion funnel; ingestion/retention estimator; cloud cost estimator; defensive incident checklist; information-risk rating; transaction-fee estimator; fluid type scale; dp-to-pixel converter; and expected-damage calculator. | Complete |
 | 6. Technology modules 17–30 | Build usable module experiences for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. | Planned |
 | 7. Central AI engine | Add a server-side AI orchestration layer with provider integrations, configuration, and safe handling of credentials. | Planned |
 | 8. Integrations and automation | Connect modules through defined interfaces and add cross-module workflows and automation. | Planned |
