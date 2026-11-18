@@ -1,10 +1,15 @@
-# TECHVERSE 30
+# OMNIVERSE AI
+
+**One AI. Thirty Technologies. Twenty Industries. One Connected Universe.**
+
+> Stage 1–2 migration: the application is now presented as OMNIVERSE AI while legacy
+> API service names and routes remain compatible. Existing functionality is preserved.
 
 An integrated technology workspace delivered across 10 stages. Stages 1–5 provide the project foundation, dashboard and 3D technology map, database-backed accounts, signed bearer tokens, and private authenticated asset management. Stage 6 adds browser-local module tools, Stage 7 adds an OpenAI-compatible central AI engine, Stage 8 adds workflow integration, and Stage 9 adds security controls and tests. Stage 10 provides container deployment, CI automation, environment guidance, and operational documentation.
 
 ## Dashboard preview
 
-![TECHVERSE 30 dashboard showing the technology directory and connected API](apps/web/public/dashboard-screenshot.png)
+![OMNIVERSE AI dashboard showing the technology directory and connected API](apps/web/public/dashboard-screenshot.png)
 
 ## Architecture
 

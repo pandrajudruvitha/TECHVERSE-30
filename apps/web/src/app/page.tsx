@@ -276,11 +276,11 @@ export default function Home() {
         className={`sidebar ${sidebarCollapsed ? "sidebar-collapsed" : ""} ${mobileSidebarOpen ? "sidebar-mobile-open" : ""}`}
         aria-label="Main navigation"
       >
-        <a className="sidebar-brand" href="#overview" aria-label="TECHVERSE 30 overview">
-          <span className="sidebar-brand-icon">T</span>
+        <a className="sidebar-brand" href="#overview" aria-label="OMNIVERSE AI overview">
+          <span className="sidebar-brand-icon">O</span>
           {!sidebarCollapsed && (
             <span className="sidebar-brand-wordmark">
-              TECHVERSE <small>30</small>
+              OMNIVERSE <small>AI</small>
             </span>
           )}
         </a>
@@ -449,8 +449,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 10 of 10</strong>
-                <small>Deployment and documentation · complete</small>
+                <strong>Stage 2 of 10</strong>
+                <small>Platform branding and design · complete</small>
               </span>
             )}
           </div>
@@ -485,7 +485,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 10</span>
+            <span className="topbar-stage">STAGE 2</span>
           </div>
 
           <div className="topbar-actions">
@@ -565,7 +565,7 @@ export default function Home() {
                 )}
               </AnimatePresence>
             </div>
-            <div className="avatar" aria-label="TECHVERSE workspace">T</div>
+            <div className="avatar" aria-label="OMNIVERSE AI workspace">O</div>
           </div>
         </header>
 
@@ -574,14 +574,14 @@ export default function Home() {
             <div className="welcome-copy">
               <p className="eyebrow">
                 <span className="eyebrow-line" />
-                YOUR TECHNOLOGY WORKSPACE
+                YOUR TECHNOLOGY & INDUSTRY WORKSPACE
               </p>
               <h1 id="welcome-heading">
                 Explore the <span>possibilities.</span>
               </h1>
               <p>
-                One connected workspace for 30 technology domains. Pick a
-                direction; the tools will follow.
+                One connected workspace for technology, industry intelligence,
+                and AI-assisted exploration.
               </p>
             </div>
             <div className="welcome-orbit" aria-hidden="true">
@@ -1066,8 +1066,8 @@ export default function Home() {
           </section>
 
           <footer className="footer">
-            <span>TECHVERSE 30</span>
-            <span>STAGE 10 COMPLETE · DEPLOYMENT READY</span>
+            <span>OMNIVERSE AI</span>
+            <span>STAGE 2 COMPLETE · DESIGN SYSTEM READY</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

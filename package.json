@@ -1,8 +1,8 @@
 {
-  "name": "techverse-30",
+  "name": "omniverse-ai",
   "version": "0.1.0",
   "private": true,
-  "description": "Foundation for TECHVERSE 30",
+  "description": "OMNIVERSE AI — technology and global industries ecosystem",
   "scripts": {
     "dev:web": "npm --prefix apps/web run dev",
     "build:web": "npm --prefix apps/web run build",

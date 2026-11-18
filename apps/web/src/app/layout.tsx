@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TECHVERSE 30 | Technology Workspace",
+  title: "OMNIVERSE AI | Technology & Industry Intelligence",
   description:
-    "Explore 30 connected technology domains in an interactive, futuristic workspace.",
+    "Explore connected technology domains and industries in an intelligent, futuristic workspace.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
