@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.ai import router as ai_router
 from app.assets import router as assets_router
 from app.auth import router as auth_router
+from app.integrations import router as integrations_router
 from app.schemas import HealthResponse
 
 frontend_origin = os.getenv("FRONTEND_ORIGIN")
@@ -31,6 +32,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(assets_router)
 app.include_router(ai_router)
+app.include_router(integrations_router)
 
 
 @app.get("/health", response_model=HealthResponse, tags=["platform"])

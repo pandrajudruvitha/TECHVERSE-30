@@ -46,6 +46,7 @@ import {
 import AssetInventory from "@/components/AssetInventory";
 import CentralAIEngine from "@/components/CentralAIEngine";
 import DeveloperWorkspace from "@/components/DeveloperWorkspace";
+import IntegrationWorkbench from "@/components/IntegrationWorkbench";
 import ModuleWorkbench from "@/components/ModuleWorkbench";
 import {
   useCallback,
@@ -351,6 +352,24 @@ export default function Home() {
                 </>
               )}
             </button>
+            <button
+              className="nav-link"
+              onClick={() =>
+                document.getElementById("integrations")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              title={sidebarCollapsed ? "Workflow integrations" : undefined}
+            >
+              <Workflow size={17} aria-hidden="true" />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Automations</span>
+                  <span className="nav-lock">S8</span>
+                </>
+              )}
+            </button>
           </nav>
 
           {!sidebarCollapsed && (
@@ -392,8 +411,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 7 of 10</strong>
-                <small>Central AI engine · complete</small>
+                <strong>Stage 8 of 10</strong>
+                <small>Integrations and automation · complete</small>
               </span>
             )}
           </div>
@@ -428,7 +447,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 07</span>
+            <span className="topbar-stage">STAGE 08</span>
           </div>
 
           <div className="topbar-actions">
@@ -746,14 +765,15 @@ export default function Home() {
                 </span>
                 <span>
                   <strong>Central AI assistant</strong>
-                  <small>Model integrations arrive with Stage 7.</small>
+                  <small>OpenAI-compatible orchestration is configured by the API.</small>
                 </span>
-                <span className="coming-label">STAGE 7</span>
+                <span className="coming-label">ACTIVE</span>
               </div>
             </article>
           </section>
 
           <CentralAIEngine />
+          <IntegrationWorkbench />
 
           <section
             className="panel module-library"
@@ -987,17 +1007,22 @@ export default function Home() {
                 <i><Check size={10} /></i>
                 <span>Central AI engine</span>
               </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><span /></i>
+                <span>Integrations</span>
+              </span>
               <span className="roadmap-connector" />
               <span className="roadmap-step roadmap-step-current" aria-current="step">
                 <i><span /></i>
-                <span>Integrations</span>
+                <span>Security and optimization</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 07 COMPLETE · CENTRAL AI ENGINE</span>
+            <span>STAGE 08 COMPLETE · WORKFLOW INTEGRATIONS</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

@@ -32,6 +32,14 @@ class AIStatusResponse(BaseModel):
     model: str
 
 
+class IntegrationStatusResponse(BaseModel):
+    api: str
+    ai_configured: bool
+    ai_model: str
+    assets: str
+    module_workbenches: str
+
+
 class RegisterRequest(BaseModel):
     email: EmailStr = Field(max_length=320)
     password: str = Field(min_length=12, max_length=128)

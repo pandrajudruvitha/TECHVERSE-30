@@ -19,3 +19,17 @@ def test_ai_chat_requires_configuration(client: TestClient, monkeypatch) -> None
     )
 
     assert response.status_code == 503
+
+
+def test_integration_status(client: TestClient, monkeypatch) -> None:
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    response = client.get("/integrations/status")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "api": "connected",
+        "ai_configured": False,
+        "ai_model": "gpt-4o-mini",
+        "assets": "authenticated",
+        "module_workbenches": "browser-local",
+    }
