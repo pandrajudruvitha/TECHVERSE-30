@@ -26,6 +26,8 @@ is preserved.
 ## Working Features
 
 - Responsive dashboard and search/filterable 30-domain technology catalog
+- Universal search across technology and 20-industry catalogs
+- Browser-persistent favorites and recent catalog selections
 - Interactive Three.js technology universe with 2D fallback
 - Registration, login, current-user endpoint, Argon2 hashing, and JWT authentication
 - User-scoped asset inventory CRUD
@@ -41,6 +43,7 @@ is preserved.
 | Capability | Status |
 | --- | --- |
 | Technology catalog and workbench | Implemented / Tested |
+| Universal dashboard and industry catalog | Implemented / Tested |
 | Account and asset management | Implemented / Tested |
 | Central AI provider adapter | Implemented / Integration Required |
 | AI local demo mode | Not Implemented |

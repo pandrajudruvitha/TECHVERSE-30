@@ -58,6 +58,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { industryModules, type IndustryModule } from "@/data/industries";
 import {
   categoryColors,
   categoryCounts,
@@ -163,6 +164,26 @@ export default function Home() {
   >("All modules");
   const [selectedModule, setSelectedModule] =
     useState<TechnologyModule | null>(null);
+  const [selectedIndustry, setSelectedIndustry] =
+    useState<IndustryModule | null>(null);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem("omniverse-favorites") ?? "[]");
+      return Array.isArray(stored) ? stored.slice(0, 30) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [recentIds, setRecentIds] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem("omniverse-recent") ?? "[]");
+      return Array.isArray(stored) ? stored.slice(0, 8) : [];
+    } catch {
+      return [];
+    }
+  });
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState<ApiStatus>("checking");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -179,14 +200,65 @@ export default function Home() {
     });
   }, [activeCategory, search]);
 
+  const visibleIndustries = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return industryModules;
+    return industryModules.filter((industry) =>
+      `${industry.name} ${industry.shortName} ${industry.description} ${industry.tags.join(" ")}`
+        .toLowerCase()
+        .includes(query),
+    );
+  }, [search]);
+
+  const favoriteModules = useMemo(
+    () =>
+      favoriteIds
+        .filter((id) => id.startsWith("technology:"))
+        .map((id) => technologyModules.find(
+          (module) => `technology:${module.id}` === id,
+        ))
+        .filter((module): module is TechnologyModule => Boolean(module)),
+    [favoriteIds],
+  );
+
   const openModule = useCallback((module: TechnologyModule) => {
     setSelectedModule(module);
+    setSelectedIndustry(null);
+    setRecentIds((current) => [
+      `technology:${module.id}`,
+      ...current.filter((id) => id !== `technology:${module.id}`),
+    ].slice(0, 8));
     setMobileSidebarOpen(false);
     document.getElementById("module-library")?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
   }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("omniverse-favorites", JSON.stringify(favoriteIds));
+  }, [favoriteIds]);
+
+  useEffect(() => {
+    window.localStorage.setItem("omniverse-recent", JSON.stringify(recentIds));
+  }, [recentIds]);
+
+  const openIndustry = (industry: IndustryModule) => {
+    setSelectedIndustry(industry);
+    setSelectedModule(null);
+    setRecentIds((current) => [
+      `industry:${industry.id}`,
+      ...current.filter((id) => id !== `industry:${industry.id}`),
+    ].slice(0, 8));
+  };
+
+  const toggleFavorite = (id: string) => {
+    setFavoriteIds((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id].slice(0, 30),
+    );
+  };
 
   useEffect(() => {
     const baseUrl = (
@@ -253,6 +325,7 @@ export default function Home() {
   ) => {
     setActiveCategory(category);
     setSelectedModule(null);
+    setSelectedIndustry(null);
     setMobileSidebarOpen(false);
   };
 
@@ -318,6 +391,23 @@ export default function Home() {
               {!sidebarCollapsed && <span>Technology modules</span>}
               {!sidebarCollapsed && (
                 <span className="nav-count">{technologyModules.length}</span>
+              )}
+            </button>
+            <button
+              className="nav-link"
+              onClick={() =>
+                document.getElementById("industry-library")?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
+              title={sidebarCollapsed ? "Industry universes" : undefined}
+            >
+              <Globe2 size={17} aria-hidden="true" />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Industry universes</span>
+                  <span className="nav-count">{industryModules.length}</span>
+                </>
               )}
             </button>
             <div
@@ -449,8 +539,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 2 of 10</strong>
-                <small>Platform branding and design · complete</small>
+                <strong>Stage 3 of 10</strong>
+                <small>Universal dashboard · complete</small>
               </span>
             )}
           </div>
@@ -485,7 +575,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 2</span>
+            <span className="topbar-stage">STAGE 3</span>
           </div>
 
           <div className="topbar-actions">
@@ -493,8 +583,8 @@ export default function Home() {
               <Search size={16} aria-hidden="true" />
               <input
                 ref={searchRef}
-                aria-label="Search technology modules"
-                placeholder="Search anything..."
+                aria-label="Search technology and industry modules"
+                placeholder="Search technologies & industries..."
                 value={search}
                 onChange={(event) => {
                   setSearch(event.target.value);
@@ -816,6 +906,132 @@ export default function Home() {
           <DeploymentDocumentationPanel />
 
           <section
+            className="panel industry-library"
+            id="industry-library"
+            aria-labelledby="industry-library-title"
+          >
+            <div className="library-heading">
+              <div>
+                <span className="panel-eyebrow">THE INDUSTRY UNIVERSE</span>
+                <h2 id="industry-library-title">Explore global industries</h2>
+                <p>
+                  Navigate 20 industry universes. Dedicated workflows arrive in Stage 6.
+                </p>
+              </div>
+              <div className="library-total">
+                <strong>{String(visibleIndustries.length).padStart(2, "0")}</strong>
+                <span>OF 20 INDUSTRIES</span>
+              </div>
+            </div>
+
+            {recentIds.length > 0 && (
+              <div className="favorites-strip" aria-label="Recently visited modules">
+                <span>RECENT</span>
+                {recentIds.slice(0, 6).map((id) => {
+                  if (id.startsWith("technology:")) {
+                    const technologyModule = technologyModules.find(
+                      (item) => `technology:${item.id}` === id,
+                    );
+                    return technologyModule ? (
+                      <button key={id} onClick={() => openModule(technologyModule)}>
+                        {technologyModule.shortName}
+                      </button>
+                    ) : null;
+                  }
+                  const industry = industryModules.find(
+                    (item) => `industry:${item.id}` === id,
+                  );
+                  return industry ? (
+                    <button key={id} onClick={() => openIndustry(industry)}>
+                      {industry.shortName}
+                    </button>
+                  ) : null;
+                })}
+              </div>
+            )}
+
+            {favoriteModules.length > 0 && (
+              <div className="favorites-strip" aria-label="Favorite technology modules">
+                <span>FAVORITES</span>
+                {favoriteModules.map((module) => (
+                  <button key={module.id} onClick={() => openModule(module)}>
+                    {module.shortName}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {selectedIndustry && (
+              <div className="industry-detail" role="status">
+                <span className="industry-detail-icon">
+                  <Globe2 size={18} aria-hidden="true" />
+                </span>
+                <span>
+                  <strong>{selectedIndustry.name}</strong>
+                  <small>
+                    {selectedIndustry.subindustryCount > 0
+                      ? `${selectedIndustry.subindustryCount} cataloged subindustries · industry workspace planned`
+                      : "Frontier concepts require maturity labelling · no real capability is implied"}
+                  </small>
+                </span>
+                <button
+                  className="industry-favorite"
+                  onClick={() => toggleFavorite(`industry:${selectedIndustry.id}`)}
+                  aria-pressed={favoriteIds.includes(`industry:${selectedIndustry.id}`)}
+                >
+                  {favoriteIds.includes(`industry:${selectedIndustry.id}`) ? "Saved" : "Save"}
+                </button>
+                <button
+                  className="detail-close"
+                  aria-label={`Close ${selectedIndustry.name} details`}
+                  onClick={() => setSelectedIndustry(null)}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+
+            {visibleIndustries.length > 0 ? (
+              <motion.div layout className="industry-grid">
+                {visibleIndustries.map((industry, index) => (
+                  <motion.button
+                    className="industry-card"
+                    key={industry.id}
+                    layout
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.18, delay: index < 6 ? index * 0.025 : 0 }}
+                    onClick={() => openIndustry(industry)}
+                    aria-pressed={selectedIndustry?.id === industry.id}
+                  >
+                    <span className="industry-card-top">
+                      <span className="industry-icon">
+                        <Globe2 size={16} aria-hidden="true" />
+                      </span>
+                      <span className="industry-save" aria-hidden="true">
+                        {favoriteIds.includes(`industry:${industry.id}`) ? "Saved" : "Save"}
+                      </span>
+                    </span>
+                    <strong>{industry.shortName}</strong>
+                    <small>{industry.description}</small>
+                    <span className="industry-card-meta">
+                      {industry.subindustryCount > 0
+                        ? `${industry.subindustryCount} subindustries`
+                        : "Frontier innovation"}
+                    </span>
+                  </motion.button>
+                ))}
+              </motion.div>
+            ) : (
+              <div className="no-results">
+                <Search size={18} />
+                <span>No industries match “{search}”.</span>
+                <button onClick={() => setSearch("")}>Clear search</button>
+              </div>
+            )}
+          </section>
+
+          <section
             className="panel module-library"
             id="module-library"
             aria-labelledby="library-title"
@@ -894,6 +1110,13 @@ export default function Home() {
                     </small>
                   </span>
                   <button
+                    className="industry-favorite"
+                    onClick={() => toggleFavorite(`technology:${selectedModule.id}`)}
+                    aria-pressed={favoriteIds.includes(`technology:${selectedModule.id}`)}
+                  >
+                    {favoriteIds.includes(`technology:${selectedModule.id}`) ? "Saved" : "Save"}
+                  </button>
+                  <button
                     className="detail-close"
                     aria-label={`Close ${selectedModule.name} details`}
                     onClick={() => setSelectedModule(null)}
@@ -936,7 +1159,7 @@ export default function Home() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.96 }}
                       transition={{ duration: 0.18, delay: index < 6 ? index * 0.025 : 0 }}
-                      onClick={() => setSelectedModule(module)}
+                      onClick={() => openModule(module)}
                       aria-pressed={selectedModule?.id === module.id}
                     >
                       <span
@@ -1067,7 +1290,7 @@ export default function Home() {
 
           <footer className="footer">
             <span>OMNIVERSE AI</span>
-            <span>STAGE 2 COMPLETE · DESIGN SYSTEM READY</span>
+            <span>STAGE 3 COMPLETE · UNIVERSAL DASHBOARD READY</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>
