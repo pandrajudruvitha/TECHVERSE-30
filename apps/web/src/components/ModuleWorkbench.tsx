@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Clipboard, RotateCcw, Sparkles } from "lucide-react";
+import { Clipboard, Download, RotateCcw, Save, Sparkles, Trash2 } from "lucide-react";
 import type { TechnologyModule } from "@/data/modules";
 
 type Field = {
@@ -25,6 +25,20 @@ type Tool = {
     checks: Record<string, boolean>,
   ) => string;
 };
+
+type SavedProject = {
+  id: string;
+  title: string;
+  moduleId: string;
+  moduleName: string;
+  toolTitle: string;
+  values: Record<string, string>;
+  checks: Record<string, boolean>;
+  result: string;
+  savedAt: string;
+};
+
+const projectStorageKey = "omniverse-ai:technology-projects:v1";
 
 const numberField = (
   id: string,
@@ -957,6 +971,22 @@ export default function ModuleWorkbench({
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [projectTitle, setProjectTitle] = useState(`${module.shortName} project`);
+  const [savedProjects, setSavedProjects] = useState<SavedProject[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored: unknown = JSON.parse(
+        window.localStorage.getItem(projectStorageKey) ?? "[]",
+      );
+      return Array.isArray(stored)
+        ? (stored as SavedProject[]).filter(
+            (project) => project.moduleId === module.id,
+          )
+        : [];
+    } catch {
+      return [];
+    }
+  });
 
   if (!tool) return null;
 
@@ -985,6 +1015,106 @@ export default function ModuleWorkbench({
     setResult("");
     setError("");
     setNotice("");
+  };
+
+  const readAllProjects = (): SavedProject[] => {
+    try {
+      const stored: unknown = JSON.parse(
+        window.localStorage.getItem(projectStorageKey) ?? "[]",
+      );
+      return Array.isArray(stored) ? (stored as SavedProject[]) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const saveProject = () => {
+    if (!result.trim()) {
+      setError("Run the tool once before saving a project.");
+      setNotice("");
+      return;
+    }
+    const title = projectTitle.trim();
+    if (!title) {
+      setError("Add a project name before saving.");
+      setNotice("");
+      return;
+    }
+    const project: SavedProject = {
+      id: crypto.randomUUID(),
+      title,
+      moduleId: module.id,
+      moduleName: module.name,
+      toolTitle: tool.title,
+      values,
+      checks,
+      result,
+      savedAt: new Date().toISOString(),
+    };
+    try {
+      const next = [project, ...readAllProjects()].slice(0, 100);
+      window.localStorage.setItem(projectStorageKey, JSON.stringify(next));
+      setSavedProjects(next.filter((item) => item.moduleId === module.id));
+      setError("");
+      setNotice("Project saved in this browser.");
+    } catch {
+      setError("Could not save the project. Browser storage may be unavailable.");
+      setNotice("");
+    }
+  };
+
+  const loadProject = (project: SavedProject) => {
+    setProjectTitle(project.title);
+    setValues(project.values);
+    setChecks(project.checks);
+    setResult(project.result);
+    setError("");
+    setNotice(`Loaded “${project.title}”.`);
+  };
+
+  const deleteProject = (projectId: string) => {
+    try {
+      const next = readAllProjects().filter((project) => project.id !== projectId);
+      window.localStorage.setItem(projectStorageKey, JSON.stringify(next));
+      setSavedProjects(next.filter((project) => project.moduleId === module.id));
+      setNotice("Saved project deleted.");
+      setError("");
+    } catch {
+      setError("Could not delete the saved project.");
+      setNotice("");
+    }
+  };
+
+  const exportProject = () => {
+    if (!result.trim()) {
+      setError("Run the tool once before exporting.");
+      setNotice("");
+      return;
+    }
+    const content = [
+      `OMNIVERSE AI — ${module.name}`,
+      `Project: ${projectTitle.trim() || "Untitled project"}`,
+      `Tool: ${tool.title}`,
+      "",
+      "INPUTS",
+      ...tool.fields.map((field) => `${field.label}: ${values[field.id] ?? ""}`),
+      "",
+      "RESULT",
+      result,
+      "",
+      "Note: Browser-local estimate or planning output. Verify domain-specific constraints before use.",
+    ].join("\n");
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${module.id}-${projectTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || "project"}.txt`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+    setError("");
+    setNotice("Project exported as a text report.");
   };
 
   return (
@@ -1065,6 +1195,46 @@ export default function ModuleWorkbench({
           </button>
         </div>
       </form>
+
+      <div className="module-project-controls">
+        <label>
+          Project name
+          <input
+            value={projectTitle}
+            maxLength={100}
+            onChange={(event) => setProjectTitle(event.target.value)}
+          />
+        </label>
+        <button type="button" className="asset-text-button" onClick={saveProject}>
+          <Save size={13} aria-hidden="true" />
+          Save project
+        </button>
+        <button type="button" className="asset-text-button" onClick={exportProject}>
+          <Download size={13} aria-hidden="true" />
+          Export report
+        </button>
+      </div>
+
+      {savedProjects.length > 0 && (
+        <div className="module-saved-projects" aria-label="Saved projects">
+          <strong>Saved projects</strong>
+          {savedProjects.map((project) => (
+            <div className="module-saved-project" key={project.id}>
+              <button type="button" onClick={() => loadProject(project)}>
+                <span>{project.title}</span>
+                <small>{new Date(project.savedAt).toLocaleString()}</small>
+              </button>
+              <button
+                type="button"
+                aria-label={`Delete ${project.title}`}
+                onClick={() => deleteProject(project.id)}
+              >
+                <Trash2 size={13} aria-hidden="true" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {result && (
         <div className="module-tool-result" aria-live="polite">

@@ -1998,6 +1998,94 @@ button.category-link {
   gap: 5px;
 }
 
+.module-project-controls {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto auto;
+  align-items: end;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.module-project-controls label,
+.module-tool-fields label {
+  display: grid;
+  gap: 6px;
+  color: #9da4ba;
+  font-size: 9px;
+}
+
+.module-project-controls input {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--line-bright);
+  border-radius: 6px;
+  background: rgba(7, 9, 15, 0.54);
+  color: #dde1f2;
+  font-size: 10px;
+}
+
+.module-project-controls .asset-text-button,
+.module-saved-project button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.module-saved-projects {
+  display: grid;
+  gap: 6px;
+  margin-top: 11px;
+}
+
+.module-saved-projects > strong {
+  color: #767e94;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.module-saved-project {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px;
+  gap: 6px;
+}
+
+.module-saved-project > button {
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.018);
+  color: #b9bfd2;
+}
+
+.module-saved-project > button:first-child {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  padding: 5px 8px;
+  text-align: left;
+}
+
+.module-saved-project > button:first-child span {
+  font-size: 9px;
+}
+
+.module-saved-project > button:first-child small {
+  margin-top: 2px;
+  color: #777f95;
+  font-size: 8px;
+}
+
+.module-saved-project > button:last-child {
+  justify-content: center;
+  color: #8e96aa;
+}
+
 .module-tool-result {
   margin-top: 13px;
   overflow: hidden;
@@ -3519,6 +3607,10 @@ button.category-link {
   .industry-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 7px;
+  }
+
+  .module-project-controls {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .module-card {

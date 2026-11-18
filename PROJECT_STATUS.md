@@ -44,6 +44,7 @@ is preserved.
 | --- | --- |
 | Technology catalog and workbench | Implemented / Tested |
 | Universal dashboard and industry catalog | Implemented / Tested |
+| Technology project save/load/export | Implemented / Tested |
 | Account and asset management | Implemented / Tested |
 | Central AI provider adapter | Implemented / Integration Required |
 | AI local demo mode | Not Implemented |

@@ -13,6 +13,15 @@
 
 - Existing technology workbenches and API-backed features
 
+## Stage 4 - 2026-11-18
+
+### Added
+
+- Shared technology workbench project names
+- Browser-local project save, load, and delete
+- Text-report export for workbench results
+- Module workbench data available for continued AI-assisted workflows
+
 ## Stage 2 - 2026-11-18
 
 ### Added

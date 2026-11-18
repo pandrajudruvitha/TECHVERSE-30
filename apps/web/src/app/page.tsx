@@ -539,8 +539,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 3 of 10</strong>
-                <small>Universal dashboard · complete</small>
+                <strong>Stage 4 of 10</strong>
+                <small>Technology universe · complete</small>
               </span>
             )}
           </div>
@@ -575,7 +575,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 3</span>
+            <span className="topbar-stage">STAGE 4</span>
           </div>
 
           <div className="topbar-actions">
@@ -1290,7 +1290,7 @@ export default function Home() {
 
           <footer className="footer">
             <span>OMNIVERSE AI</span>
-            <span>STAGE 3 COMPLETE · UNIVERSAL DASHBOARD READY</span>
+            <span>STAGE 4 COMPLETE · TECHNOLOGY UNIVERSE READY</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>
