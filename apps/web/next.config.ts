@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
   distDir:
     process.env.TECHVERSE_AUTOMATED_BUILD === "1" ? ".next-automation" : ".next",
   cacheComponents: true,

@@ -1,6 +1,6 @@
 # TECHVERSE 30
 
-An integrated technology workspace under staged development. Stages 1–5 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, a private, authenticated IT asset inventory, and first-pass tools for technology modules 2–16. Stage 6 is complete with browser-local tools for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. Stage 7 adds a server-side, OpenAI-compatible central AI engine with provider credentials kept out of the browser. Stage 8 adds cross-platform integration status and browser-local workflow automation. Stage 9 adds security headers, request limits, provider URL validation, sensitive-route cache policies, and an exposed security-status view. Stage 10 remains planned.
+An integrated technology workspace delivered across 10 stages. Stages 1–5 provide the project foundation, dashboard and 3D technology map, database-backed accounts, signed bearer tokens, and private authenticated asset management. Stage 6 adds browser-local module tools, Stage 7 adds an OpenAI-compatible central AI engine, Stage 8 adds workflow integration, and Stage 9 adds security controls and tests. Stage 10 provides container deployment, CI automation, environment guidance, and operational documentation.
 
 ## Dashboard preview
 
@@ -122,9 +122,29 @@ docker compose --env-file .env -f infra\docker-compose.yml up -d
 
 Do not use the example credentials outside local development. Apply migrations with `.\.venv\Scripts\alembic.exe -c apps\api\alembic.ini upgrade head` before using authentication or the asset inventory.
 
+## Container deployment
+
+The repository includes Dockerfiles for the FastAPI API and Next.js frontend plus a full Compose stack for PostgreSQL, Redis, the API, and the web app:
+
+```powershell
+Copy-Item .env.example .env
+# Replace every development-only secret and set public origins.
+docker compose --env-file .env -f infra\docker-compose.yml up --build
+```
+
+Deployable services:
+
+- API: `http://localhost:8000`
+- Frontend: `http://localhost:3000`
+- Interactive API documentation: `http://localhost:8000/docs`
+- Health: `http://localhost:8000/health`
+- Deployment status: `http://localhost:8000/deployment/status`
+
+The API container runs Alembic migrations before starting Uvicorn. Set `DATABASE_URL`, `JWT_SECRET`, `FRONTEND_ORIGIN`, and `NEXT_PUBLIC_API_BASE_URL` for each deployment environment. Never place `LLM_API_KEY` or `JWT_SECRET` in a `NEXT_PUBLIC_*` variable. GitHub Actions runs frontend lint/build and API tests for pushes and pull requests to `main`.
+
 ## Delivery stages and status
 
-Stages 1–9 are implemented in this repository. Stage 10 is planned. A stage is marked complete only after its deliverables are implemented and verified.
+Stages 1–10 are implemented in this repository. A stage is marked complete only after its deliverables are implemented and verified.
 
 | Stage | Scope | Status |
 | --- | --- | --- |
@@ -137,4 +157,4 @@ Stages 1–9 are implemented in this repository. Stage 10 is planned. A stage is
 | 7. Central AI engine | Add a server-side AI orchestration layer with provider integrations, configuration, and safe handling of credentials. | Complete |
 | 8. Integrations and automation | Connect modules through defined interfaces and add cross-module workflows and automation. | Complete |
 | 9. Security, testing, and optimization | Extend security controls and automated coverage across the platform; measure and improve reliability and performance. | Complete |
-| 10. Deployment and documentation | Define production deployment, environment configuration, operational guidance, and user-facing documentation. | Planned |
+| 10. Deployment and documentation | Define production deployment, environment configuration, operational guidance, and user-facing documentation. | Complete |

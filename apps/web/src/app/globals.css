@@ -2875,6 +2875,119 @@ button.category-link {
  }
 }
 
+.deployment-panel {
+ display: grid;
+ gap: 14px;
+ margin: 14px 0;
+ padding: 18px;
+ border: 1px solid var(--line);
+ border-radius: 10px;
+ background: linear-gradient(135deg, rgba(18, 32, 42, 0.96), rgba(13, 16, 25, 0.96));
+}
+
+.deployment-heading {
+ display: flex;
+ align-items: start;
+ justify-content: space-between;
+ gap: 12px;
+}
+
+.deployment-heading h2 {
+ margin: 8px 0 5px;
+ font-size: 18px;
+ font-weight: 500;
+}
+
+.deployment-heading p {
+ margin: 0;
+ color: var(--muted);
+}
+
+.deployment-icon {
+ display: grid;
+ width: 38px;
+ height: 38px;
+ flex: 0 0 auto;
+ place-items: center;
+ border: 1px solid rgba(102, 223, 237, 0.24);
+ border-radius: 9px;
+ background: rgba(102, 223, 237, 0.08);
+ color: var(--cyan);
+}
+
+.deployment-status-grid {
+ display: grid;
+ grid-template-columns: repeat(4, minmax(0, 1fr));
+ gap: 8px;
+}
+
+.deployment-status-grid div {
+ display: grid;
+ gap: 4px;
+ min-height: 55px;
+ align-content: center;
+ border: 1px solid var(--line);
+ border-radius: 8px;
+ background: rgba(8, 10, 17, 0.48);
+ padding: 9px 10px;
+}
+
+.deployment-status-grid span {
+ color: var(--muted);
+ font-size: 9px;
+ text-transform: uppercase;
+}
+
+.deployment-status-grid strong {
+ color: #dfe3f5;
+ font-size: 11px;
+ font-weight: 500;
+}
+
+.deployment-guides {
+ display: grid;
+ grid-template-columns: repeat(3, minmax(0, 1fr));
+ gap: 8px;
+}
+
+.deployment-guides article {
+ display: flex;
+ align-items: flex-start;
+ gap: 8px;
+ border: 1px solid var(--line);
+ border-radius: 8px;
+ background: rgba(8, 10, 17, 0.48);
+ padding: 10px;
+ color: var(--cyan);
+}
+
+.deployment-guides article span {
+ display: grid;
+ gap: 3px;
+}
+
+.deployment-guides strong {
+ color: #dfe3f5;
+ font-size: 10px;
+ font-weight: 500;
+}
+
+.deployment-guides small {
+ color: var(--muted);
+ font-size: 9px;
+ line-height: 1.5;
+}
+
+@media (max-width: 940px) {
+ .deployment-status-grid {
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+ }
+
+ .deployment-guides {
+   grid-template-columns: 1fr;
+ }
+}
+
 .roadmap-step-future {
   color: #a8adbf;
 }

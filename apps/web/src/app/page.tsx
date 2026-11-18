@@ -45,6 +45,7 @@ import {
 } from "lucide-react";
 import AssetInventory from "@/components/AssetInventory";
 import CentralAIEngine from "@/components/CentralAIEngine";
+import DeploymentDocumentationPanel from "@/components/DeploymentDocumentationPanel";
 import DeveloperWorkspace from "@/components/DeveloperWorkspace";
 import IntegrationWorkbench from "@/components/IntegrationWorkbench";
 import ModuleWorkbench from "@/components/ModuleWorkbench";
@@ -389,6 +390,24 @@ export default function Home() {
                 </>
               )}
             </button>
+            <button
+              className="nav-link"
+              onClick={() =>
+                document.getElementById("deployment")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              title={sidebarCollapsed ? "Deployment and documentation" : undefined}
+            >
+              <Cloud size={17} aria-hidden="true" />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Deployment</span>
+                  <span className="nav-lock">S10</span>
+                </>
+              )}
+            </button>
           </nav>
 
           {!sidebarCollapsed && (
@@ -430,8 +449,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 9 of 10</strong>
-                <small>Security and optimization · complete</small>
+                <strong>Stage 10 of 10</strong>
+                <small>Deployment and documentation · complete</small>
               </span>
             )}
           </div>
@@ -466,7 +485,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 09</span>
+            <span className="topbar-stage">STAGE 10</span>
           </div>
 
           <div className="topbar-actions">
@@ -794,6 +813,7 @@ export default function Home() {
           <CentralAIEngine />
           <IntegrationWorkbench />
           <SecurityOptimizationPanel />
+          <DeploymentDocumentationPanel />
 
           <section
             className="panel module-library"
@@ -1037,9 +1057,9 @@ export default function Home() {
                 <i><Check size={10} /></i>
                 <span>Security and optimization</span>
               </span>
-              <span className="roadmap-connector" />
-              <span className="roadmap-step roadmap-step-current" aria-current="step">
-                <i><span /></i>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
                 <span>Deployment and documentation</span>
               </span>
             </div>
@@ -1047,7 +1067,7 @@ export default function Home() {
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 09 COMPLETE · SECURITY AND OPTIMIZATION</span>
+            <span>STAGE 10 COMPLETE · DEPLOYMENT READY</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

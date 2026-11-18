@@ -63,3 +63,12 @@ def test_request_body_limit(client: TestClient) -> None:
     )
 
     assert response.status_code == 413
+
+
+def test_deployment_status(client: TestClient) -> None:
+    response = client.get("/deployment/status")
+
+    assert response.status_code == 200
+    assert response.json()["api"] == "ready"
+    assert "database_configured" in response.json()
+    assert "jwt_configured" in response.json()

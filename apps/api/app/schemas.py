@@ -48,6 +48,14 @@ class SecurityStatusResponse(BaseModel):
     no_store_sensitive_routes: bool
 
 
+class DeploymentStatusResponse(BaseModel):
+    api: str
+    database_configured: bool
+    jwt_configured: bool
+    ai_configured: bool
+    migrations: str
+
+
 class RegisterRequest(BaseModel):
     email: EmailStr = Field(max_length=320)
     password: str = Field(min_length=12, max_length=128)

@@ -7,7 +7,7 @@ from app.assets import router as assets_router
 from app.auth import router as auth_router
 from app.integrations import router as integrations_router
 from app.platform_security import PlatformSecurityMiddleware
-from app.schemas import HealthResponse, SecurityStatusResponse
+from app.schemas import DeploymentStatusResponse, HealthResponse, SecurityStatusResponse
 
 frontend_origin = os.getenv("FRONTEND_ORIGIN")
 default_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
@@ -50,4 +50,17 @@ async def security_status() -> SecurityStatusResponse:
         cors_allowlist=bool(allowed_origins),
         request_limits=True,
         no_store_sensitive_routes=True,
+    )
+
+
+@app.get("/deployment/status", response_model=DeploymentStatusResponse, tags=["platform"])
+async def deployment_status() -> DeploymentStatusResponse:
+    jwt_configured = len(os.getenv("JWT_SECRET", "").encode("utf-8")) >= 32
+    ai_configured = bool(os.getenv("LLM_API_KEY", "").strip())
+    return DeploymentStatusResponse(
+        api="ready",
+        database_configured=bool(os.getenv("DATABASE_URL", "").strip()),
+        jwt_configured=jwt_configured,
+        ai_configured=ai_configured,
+        migrations="must be applied before startup",
     )
