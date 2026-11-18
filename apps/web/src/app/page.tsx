@@ -48,6 +48,7 @@ import CentralAIEngine from "@/components/CentralAIEngine";
 import DeveloperWorkspace from "@/components/DeveloperWorkspace";
 import IntegrationWorkbench from "@/components/IntegrationWorkbench";
 import ModuleWorkbench from "@/components/ModuleWorkbench";
+import SecurityOptimizationPanel from "@/components/SecurityOptimizationPanel";
 import {
   useCallback,
   useEffect,
@@ -370,6 +371,24 @@ export default function Home() {
                 </>
               )}
             </button>
+            <button
+              className="nav-link"
+              onClick={() =>
+                document.getElementById("security")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              title={sidebarCollapsed ? "Platform security" : undefined}
+            >
+              <ShieldCheck size={17} aria-hidden="true" />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Security</span>
+                  <span className="nav-lock">S9</span>
+                </>
+              )}
+            </button>
           </nav>
 
           {!sidebarCollapsed && (
@@ -411,8 +430,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 8 of 10</strong>
-                <small>Integrations and automation · complete</small>
+                <strong>Stage 9 of 10</strong>
+                <small>Security and optimization · complete</small>
               </span>
             )}
           </div>
@@ -447,7 +466,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 08</span>
+            <span className="topbar-stage">STAGE 09</span>
           </div>
 
           <div className="topbar-actions">
@@ -774,6 +793,7 @@ export default function Home() {
 
           <CentralAIEngine />
           <IntegrationWorkbench />
+          <SecurityOptimizationPanel />
 
           <section
             className="panel module-library"
@@ -1009,20 +1029,25 @@ export default function Home() {
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
               <span className="roadmap-step roadmap-step-done">
-                <i><span /></i>
+                <i><Check size={10} /></i>
                 <span>Integrations</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>Security and optimization</span>
               </span>
               <span className="roadmap-connector" />
               <span className="roadmap-step roadmap-step-current" aria-current="step">
                 <i><span /></i>
-                <span>Security and optimization</span>
+                <span>Deployment and documentation</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 08 COMPLETE · WORKFLOW INTEGRATIONS</span>
+            <span>STAGE 09 COMPLETE · SECURITY AND OPTIMIZATION</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

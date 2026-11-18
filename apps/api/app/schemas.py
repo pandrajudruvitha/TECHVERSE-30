@@ -40,6 +40,14 @@ class IntegrationStatusResponse(BaseModel):
     module_workbenches: str
 
 
+class SecurityStatusResponse(BaseModel):
+    security_headers: bool
+    bearer_auth: bool
+    cors_allowlist: bool
+    request_limits: bool
+    no_store_sensitive_routes: bool
+
+
 class RegisterRequest(BaseModel):
     email: EmailStr = Field(max_length=320)
     password: str = Field(min_length=12, max_length=128)

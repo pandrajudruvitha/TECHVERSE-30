@@ -3,6 +3,7 @@ import os
 import httpx
 from fastapi import APIRouter, HTTPException
 
+from app.platform_security import validate_provider_base_url
 from app.schemas import AIChatRequest, AIChatResponse, AIStatusResponse
 
 router = APIRouter(prefix="/ai", tags=["central-ai"])
@@ -29,6 +30,11 @@ async def ai_chat(payload: AIChatRequest) -> AIChatResponse:
             status_code=503,
             detail="Central AI is not configured. Set LLM_API_KEY and restart the API.",
         )
+
+    try:
+        base_url = validate_provider_base_url(base_url)
+    except ValueError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
 
     try:
         async with httpx.AsyncClient(timeout=45.0) as client:

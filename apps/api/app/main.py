@@ -6,7 +6,8 @@ from app.ai import router as ai_router
 from app.assets import router as assets_router
 from app.auth import router as auth_router
 from app.integrations import router as integrations_router
-from app.schemas import HealthResponse
+from app.platform_security import PlatformSecurityMiddleware
+from app.schemas import HealthResponse, SecurityStatusResponse
 
 frontend_origin = os.getenv("FRONTEND_ORIGIN")
 default_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
@@ -29,6 +30,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS", "HEAD"],
     allow_headers=["*"],
 )
+app.add_middleware(PlatformSecurityMiddleware)
 app.include_router(auth_router)
 app.include_router(assets_router)
 app.include_router(ai_router)
@@ -38,3 +40,14 @@ app.include_router(integrations_router)
 @app.get("/health", response_model=HealthResponse, tags=["platform"])
 async def health_check() -> HealthResponse:
     return HealthResponse(service="techverse-api", status="ok", version=app.version)
+
+
+@app.get("/security/status", response_model=SecurityStatusResponse, tags=["platform"])
+async def security_status() -> SecurityStatusResponse:
+    return SecurityStatusResponse(
+        security_headers=True,
+        bearer_auth=True,
+        cors_allowlist=bool(allowed_origins),
+        request_limits=True,
+        no_store_sensitive_routes=True,
+    )

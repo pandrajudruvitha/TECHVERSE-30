@@ -33,3 +33,33 @@ def test_integration_status(client: TestClient, monkeypatch) -> None:
         "assets": "authenticated",
         "module_workbenches": "browser-local",
     }
+
+
+def test_security_headers_and_status(client: TestClient) -> None:
+    health = client.get("/health")
+    status = client.get("/security/status")
+
+    assert health.status_code == 200
+    assert health.headers["x-content-type-options"] == "nosniff"
+    assert health.headers["x-frame-options"] == "DENY"
+    assert health.headers["referrer-policy"] == "strict-origin-when-cross-origin"
+    assert status.status_code == 200
+    assert status.json()["bearer_auth"] is True
+    assert status.json()["cors_allowlist"] is True
+
+
+def test_sensitive_routes_disable_browser_cache(client: TestClient) -> None:
+    response = client.get("/ai/status")
+
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-store"
+
+
+def test_request_body_limit(client: TestClient) -> None:
+    response = client.post(
+        "/auth/register",
+        content=b"x" * (64 * 1024 + 1),
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 413
