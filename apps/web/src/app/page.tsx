@@ -44,6 +44,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import AssetInventory from "@/components/AssetInventory";
+import CentralAIEngine from "@/components/CentralAIEngine";
 import DeveloperWorkspace from "@/components/DeveloperWorkspace";
 import ModuleWorkbench from "@/components/ModuleWorkbench";
 import {
@@ -332,9 +333,15 @@ export default function Home() {
                 </>
               )}
             </div>
-            <div
-              className="nav-link nav-link-upcoming"
-              title={sidebarCollapsed ? "AI assistant arrives in Stage 7" : undefined}
+            <button
+              className="nav-link"
+              onClick={() =>
+                document.getElementById("ai-engine")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              title={sidebarCollapsed ? "Central AI engine" : undefined}
             >
               <BrainCircuit size={17} aria-hidden="true" />
               {!sidebarCollapsed && (
@@ -343,7 +350,7 @@ export default function Home() {
                   <span className="nav-lock">S7</span>
                 </>
               )}
-            </div>
+            </button>
           </nav>
 
           {!sidebarCollapsed && (
@@ -385,8 +392,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 6 of 10</strong>
-                <small>Quantum computing · circuit workload planning</small>
+                <strong>Stage 7 of 10</strong>
+                <small>Central AI engine · complete</small>
               </span>
             )}
           </div>
@@ -421,7 +428,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 06</span>
+            <span className="topbar-stage">STAGE 07</span>
           </div>
 
           <div className="topbar-actions">
@@ -746,6 +753,8 @@ export default function Home() {
             </article>
           </section>
 
+          <CentralAIEngine />
+
           <section
             className="panel module-library"
             id="module-library"
@@ -817,7 +826,9 @@ export default function Home() {
                               selectedModule.id === "internet-of-things" ||
                               selectedModule.id === "robotics" ||
                               selectedModule.id === "automation" ||
-                              selectedModule.id === "quantum-computing"
+                              selectedModule.id === "quantum-computing" ||
+                              selectedModule.id === "computer-hardware" ||
+                              selectedModule.stage === 6
                             ? "Available now · use this module's interactive tools locally in your browser."
                             : `Planned for Stage ${selectedModule.stage} · dedicated tools and persistence are not available yet.`}
                     </small>
@@ -844,7 +855,9 @@ export default function Home() {
               selectedModule?.id === "internet-of-things" ||
               selectedModule?.id === "robotics" ||
               selectedModule?.id === "automation" ||
-              selectedModule?.id === "quantum-computing") && (
+              selectedModule?.id === "quantum-computing" ||
+              selectedModule?.id === "computer-hardware" ||
+              selectedModule?.stage === 6) && (
                 <ModuleWorkbench
                   key={selectedModule.id}
                   module={selectedModule}
@@ -955,16 +968,36 @@ export default function Home() {
                 <span>Automation</span>
               </span>
               <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>Quantum computing</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>Computer hardware</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>All Stage 6 tools</span>
+              </span>
+              <span className="roadmap-connector roadmap-connector-active" />
+              <span className="roadmap-step roadmap-step-done">
+                <i><Check size={10} /></i>
+                <span>Central AI engine</span>
+              </span>
+              <span className="roadmap-connector" />
               <span className="roadmap-step roadmap-step-current" aria-current="step">
                 <i><span /></i>
-                <span>Quantum computing</span>
+                <span>Integrations</span>
               </span>
             </div>
           </section>
 
           <footer className="footer">
             <span>TECHVERSE 30</span>
-            <span>STAGE 06 IN PROGRESS · QUANTUM CIRCUIT PLANNING</span>
+            <span>STAGE 07 COMPLETE · CENTRAL AI ENGINE</span>
             <a href="#overview">
               Back to top <ChevronDown size={13} />
             </a>

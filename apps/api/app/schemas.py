@@ -11,6 +11,27 @@ class HealthResponse(BaseModel):
     version: str
 
 
+class AIChatRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    message: str = Field(min_length=1, max_length=8000)
+    system_prompt: str = Field(
+        default="You are a concise, accurate technology assistant.",
+        max_length=2000,
+    )
+
+
+class AIChatResponse(BaseModel):
+    message: str
+    model: str
+    provider: str
+
+
+class AIStatusResponse(BaseModel):
+    configured: bool
+    model: str
+
+
 class RegisterRequest(BaseModel):
     email: EmailStr = Field(max_length=320)
     password: str = Field(min_length=12, max_length=128)

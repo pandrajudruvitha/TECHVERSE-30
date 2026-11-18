@@ -1,6 +1,6 @@
 # TECHVERSE 30
 
-An integrated technology workspace under staged development. Stages 1–5 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, a private, authenticated IT asset inventory, and first-pass tools for technology modules 2–16. Stage 6 is underway with IoT telemetry, robotics wheel-motion, automation workflow ROI, and quantum circuit execution planners; later domains remain a catalog until their tools are implemented.
+An integrated technology workspace under staged development. Stages 1–5 provide the project foundation, responsive dashboard and 3D technology map, database-backed accounts, signed bearer tokens, a private, authenticated IT asset inventory, and first-pass tools for technology modules 2–16. Stage 6 is complete with browser-local tools for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. Stage 7 adds a server-side, OpenAI-compatible central AI engine with provider credentials kept out of the browser. Stages 8–10 remain planned.
 
 ## Dashboard preview
 
@@ -124,7 +124,7 @@ Do not use the example credentials outside local development. Apply migrations w
 
 ## Delivery stages and status
 
-Stages 1–5 are implemented in this repository. Stage 6 is in progress; Stages 7–10 are planned. The technology directory is otherwise a catalog, not a set of completed tools. A stage should be marked complete only after its deliverables are implemented and verified.
+Stages 1–7 are implemented in this repository. Stages 8–10 are planned. A stage is marked complete only after its deliverables are implemented and verified.
 
 | Stage | Scope | Status |
 | --- | --- | --- |
@@ -133,8 +133,8 @@ Stages 1–5 are implemented in this repository. Stage 6 is in progress; Stages 
 | 3. Accounts and database | Database-backed registration and login, password hashing, Alembic migrations, and signed bearer-token authentication. | Complete |
 | 4. IT management | Authenticated, user-scoped asset inventory with create, list, update, and delete operations. | Complete |
 | 5. Technology modules 2–16 | Browser-local MVP tools: code snippets; AI use-case brief; generative-AI prompt composer; classification metrics; dense-layer parameter estimator; descriptive statistics; conversion funnel; ingestion/retention estimator; cloud cost estimator; defensive incident checklist; information-risk rating; transaction-fee estimator; fluid type scale; dp-to-pixel converter; and expected-damage calculator. | Complete |
-| 6. Technology modules 17–30 | Build usable module experiences for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. IoT estimates telemetry rate and retention volume; Robotics estimates wheel speed and travel time; Automation estimates labor savings and payback; Quantum Computing estimates gate-layer runtime and workload. The other modules remain planned. | In progress |
-| 7. Central AI engine | Add a server-side AI orchestration layer with provider integrations, configuration, and safe handling of credentials. | Planned |
+| 6. Technology modules 17–30 | Browser-local tools for IoT, robotics, automation, quantum computing, computer hardware, semiconductors, networking, database management, IT consulting, AR/VR/XR, edge computing, DevOps, SaaS management, and telecommunications. Stage 6 includes telemetry and retention estimates, robotics motion, automation ROI, quantum workload planning, PC power budgets, wafer yield, network capacity, database growth, consulting effort, XR frame budgets, edge capacity, reliability budgets, SaaS license costs, and telecom link capacity. | Complete |
+| 7. Central AI engine | Add a server-side AI orchestration layer with provider integrations, configuration, and safe handling of credentials. | Complete |
 | 8. Integrations and automation | Connect modules through defined interfaces and add cross-module workflows and automation. | Planned |
 | 9. Security, testing, and optimization | Extend security controls and automated coverage across the platform; measure and improve reliability and performance. | Planned |
 | 10. Deployment and documentation | Define production deployment, environment configuration, operational guidance, and user-facing documentation. | Planned |

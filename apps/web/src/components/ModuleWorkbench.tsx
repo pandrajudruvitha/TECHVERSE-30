@@ -608,6 +608,333 @@ const tools: Record<string, Tool> = {
       ].join("\n");
     },
   },
+  "computer-hardware": {
+    title: "PC power budget planner",
+    description:
+      "Estimate system power from component peak values and check a PSU against a target utilization. This is a planning estimate, not a hardware measurement.",
+    fields: [
+      numberField("cpuPower", "CPU power estimate (W)", "125", 0, undefined, 1),
+      numberField("gpuPower", "GPU power estimate (W)", "250", 0, undefined, 1),
+      numberField("otherPower", "Other components (W)", "100", 0, undefined, 1),
+      numberField("psuRating", "PSU rated capacity (W)", "650", 1, undefined, 1),
+      numberField("targetUtilization", "Target maximum utilization (%)", "80", 1, 100, 1),
+    ],
+    calculate: (values) => {
+      const cpuPower = value(values, "cpuPower");
+      const gpuPower = value(values, "gpuPower");
+      const otherPower = value(values, "otherPower");
+      const psuRating = value(values, "psuRating");
+      const targetUtilization = value(values, "targetUtilization");
+      const inputs = [cpuPower, gpuPower, otherPower, psuRating, targetUtilization];
+      if (!inputs.every(Number.isFinite) || inputs.some((item) => item < 0)) {
+        return unavailable;
+      }
+      if (psuRating <= 0 || targetUtilization <= 0 || targetUtilization > 100) {
+        return "PSU capacity must be positive, and target utilization must be between 1% and 100%.";
+      }
+
+      const estimatedLoad = cpuPower + gpuPower + otherPower;
+      const utilization = estimatedLoad / psuRating * 100;
+      const recommendedCapacity = estimatedLoad / (targetUtilization / 100);
+      const remainingCapacity = psuRating - estimatedLoad;
+      if (![estimatedLoad, utilization, recommendedCapacity, remainingCapacity].every(Number.isFinite)) {
+        return "These values are too large to estimate safely.";
+      }
+
+      const targetStatus = utilization <= targetUtilization
+        ? `Within the ${number(targetUtilization, 0)}% target`
+        : `Exceeds the ${number(targetUtilization, 0)}% target by ${number(utilization - targetUtilization)} percentage points`;
+      return [
+        `Estimated component load: ${number(estimatedLoad, 0)} W`,
+        `PSU rated capacity: ${number(psuRating, 0)} W`,
+        `Estimated PSU utilization: ${number(utilization)}%`,
+        `Remaining rated capacity: ${number(remainingCapacity, 0)} W`,
+        `Minimum PSU rating at the target utilization: ${number(recommendedCapacity, 0)} W`,
+        `Target check: ${targetStatus}`,
+        "Estimate uses the entered component power values; verify transient demand, PSU connectors, and manufacturer specifications before choosing hardware.",
+      ].join("\n");
+    },
+  },
+  "semiconductor-technology": {
+    title: "Wafer yield estimator",
+    description:
+      "Estimate semiconductor die count and modeled yield from wafer geometry and defect density.",
+    fields: [
+      numberField("waferDiameter", "Wafer diameter (mm)", "300", 1, undefined, 1),
+      numberField("dieWidth", "Die width (mm)", "10", 0.1, undefined, 0.1),
+      numberField("dieHeight", "Die height (mm)", "10", 0.1, undefined, 0.1),
+      numberField("defectDensity", "Defect density (per cm²)", "0.1", 0, undefined, 0.01),
+    ],
+    calculate: (values) => {
+      const waferDiameter = value(values, "waferDiameter");
+      const dieWidth = value(values, "dieWidth");
+      const dieHeight = value(values, "dieHeight");
+      const defectDensity = value(values, "defectDensity");
+      if (![waferDiameter, dieWidth, dieHeight].every((item) => Number.isFinite(item) && item > 0) ||
+          !Number.isFinite(defectDensity) || defectDensity < 0) {
+        return "Enter positive wafer and die values, plus a non-negative defect density.";
+      }
+      const radius = waferDiameter / 2;
+      const dieAreaCm = dieWidth * dieHeight / 100;
+      const grossDies = Math.PI * radius * radius / (dieWidth * dieHeight);
+      const edgeLoss = grossDies * (dieAreaCm > 0 ? dieAreaCm * 0.08 : 0);
+      const usableDies = Math.max(0, grossDies - edgeLoss);
+      const modelYield = 1 / (1 + defectDensity * dieAreaCm);
+      const modeledYieldDies = usableDies * modelYield;
+      if (![grossDies, usableDies, modelYield, modeledYieldDies].every(Number.isFinite)) {
+        return "These values are too large to estimate safely.";
+      }
+      return [
+        `Theoretical die area count: ${number(grossDies, 0)} dies`,
+        `Approximate usable gross dies: ${number(usableDies, 0)} dies`,
+        `Modeled die yield: ${number(modelYield * 100)}%`,
+        `Estimated good dies: ${number(modeledYieldDies, 0)} per wafer`,
+        "Simplified yield model excludes reticle alignment, wafer-edge losses, clustering, and manufacturing-process-specific yield distributions.",
+      ].join("\n");
+    },
+  },
+  "networking": {
+    title: "Network capacity planner",
+    description:
+      "Estimate usable throughput and determine whether a connection can carry a target workload.",
+    fields: [
+      numberField("linkSpeed", "Link speed (Mbps)", "1000", 0.1, undefined, 0.1),
+      numberField("protocolOverhead", "Protocol overhead (%)", "10", 0, 100, 0.1),
+      numberField("targetTraffic", "Peak traffic (Mbps)", "650", 0, undefined, 0.1),
+      numberField("latency", "Round-trip latency (ms)", "40", 0, undefined, 0.1),
+    ],
+    calculate: (values) => {
+      const linkSpeed = value(values, "linkSpeed");
+      const protocolOverhead = value(values, "protocolOverhead");
+      const targetTraffic = value(values, "targetTraffic");
+      const latency = value(values, "latency");
+      if (![linkSpeed, protocolOverhead, targetTraffic, latency].every(Number.isFinite)) return unavailable;
+      if (linkSpeed <= 0 || protocolOverhead < 0 || protocolOverhead >= 100 || targetTraffic < 0 || latency < 0) {
+        return "Use a positive link speed, overhead below 100%, and non-negative traffic and latency.";
+      }
+      const usableMbps = linkSpeed * (1 - protocolOverhead / 100);
+      const utilization = usableMbps === 0 ? 0 : targetTraffic / usableMbps * 100;
+      const availableHeadroom = usableMbps - targetTraffic;
+      return [
+        `Usable throughput: ${number(usableMbps)} Mbps`,
+        `Target utilization: ${number(utilization)}%`,
+        `Available headroom: ${number(availableHeadroom)} Mbps`,
+        `Round-trip latency: ${number(latency)} ms`,
+        utilization <= 80
+          ? "Capacity check: target workload is within an 80% operating target."
+          : "Capacity check: consider reducing load or upgrading the link.",
+        "Estimate excludes congestion, retransmissions, jitter, application behavior, and full-duplex or shared-link conditions.",
+      ].join("\n");
+    },
+  },
+  "database-management": {
+    title: "Database growth planner",
+    description:
+      "Estimate daily and retained database storage from record volume and average record size.",
+    fields: [
+      numberField("recordsPerDay", "New records per day", "100000", 0, undefined, 1),
+      numberField("recordSize", "Average stored size (KB)", "4", 0, undefined, 0.1),
+      numberField("retentionDays", "Retention (days)", "365", 0, undefined, 1),
+      numberField("indexFactor", "Index and overhead multiplier", "1.5", 1, undefined, 0.1),
+    ],
+    calculate: (values) => {
+      const recordsPerDay = value(values, "recordsPerDay");
+      const recordSize = value(values, "recordSize");
+      const retentionDays = value(values, "retentionDays");
+      const indexFactor = value(values, "indexFactor");
+      if (![recordsPerDay, recordSize, retentionDays, indexFactor].every((item) => Number.isFinite(item) && item >= 0)) {
+        return unavailable;
+      }
+      if (indexFactor < 1) return "The index and overhead multiplier must be at least 1.";
+      const dailyGigabytes = recordsPerDay * recordSize / 1e6 * indexFactor;
+      const retainedGigabytes = dailyGigabytes * retentionDays;
+      return [
+        `Daily data growth: ${number(dailyGigabytes)} GB/day`,
+        `Retention volume: ${number(retainedGigabytes)} GB`,
+        `Retention volume: ${number(retainedGigabytes / 1000)} TB`,
+        `Index and overhead allowance: ${number((indexFactor - 1) * 100)}%`,
+        "Estimate does not include backups, replicas, WAL/archive logs, temporary files, partitioning, or database-specific compression.",
+      ].join("\n");
+    },
+  },
+  "it-consulting": {
+    title: "Project effort estimator",
+    description:
+      "Estimate a planning range for project effort and budget from team size, duration, and uncertainty.",
+    fields: [
+      numberField("teamSize", "Team members", "4", 1, undefined, 1),
+      numberField("durationWeeks", "Duration (weeks)", "8", 1, undefined, 1),
+      numberField("hoursPerWeek", "Hours per person / week", "40", 1, undefined, 1),
+      numberField("rate", "Blended hourly rate ($)", "125", 0, undefined, 1),
+      numberField("uncertainty", "Contingency (%)", "20", 0, undefined, 1),
+    ],
+    calculate: (values) => {
+      const teamSize = value(values, "teamSize");
+      const durationWeeks = value(values, "durationWeeks");
+      const hoursPerWeek = value(values, "hoursPerWeek");
+      const rate = value(values, "rate");
+      const uncertainty = value(values, "uncertainty");
+      const inputs = [teamSize, durationWeeks, hoursPerWeek, rate, uncertainty];
+      if (!inputs.every(Number.isFinite) || inputs.some((item) => item < 0)) return unavailable;
+      if (![teamSize, durationWeeks, hoursPerWeek].every((item) => item > 0)) {
+        return "Team size, duration, and hours per week must be positive.";
+      }
+      const baseHours = teamSize * durationWeeks * hoursPerWeek;
+      const plannedHours = baseHours * (1 + uncertainty / 100);
+      const baseCost = baseHours * rate;
+      const plannedCost = plannedHours * rate;
+      return [
+        `Base effort: ${number(baseHours, 0)} person-hours`,
+        `Effort with contingency: ${number(plannedHours, 0)} person-hours`,
+        `Base budget: ${usd(baseCost)}`,
+        `Planning budget: ${usd(plannedCost)}`,
+        `Contingency: ${number(uncertainty)}%`,
+        "Range is indicative and excludes travel, tooling, taxes, third-party fees, and scope changes.",
+      ].join("\n");
+    },
+  },
+  "ar-vr-xr": {
+    title: "XR frame budget planner",
+    description:
+      "Allocate frame time across rendering, CPU work, GPU work, and platform overhead.",
+    fields: [
+      numberField("frameRate", "Target frame rate (Hz)", "90", 1, undefined, 1),
+      numberField("renderMs", "Rendering budget (ms)", "6"),
+      numberField("cpuMs", "CPU and application work (ms)", "2"),
+      numberField("otherMs", "Compositing and overhead (ms)", "1"),
+    ],
+    calculate: (values) => {
+      const frameRate = value(values, "frameRate");
+      const renderMs = value(values, "renderMs");
+      const cpuMs = value(values, "cpuMs");
+      const otherMs = value(values, "otherMs");
+      if (![frameRate, renderMs, cpuMs, otherMs].every((item) => Number.isFinite(item) && item >= 0)) return unavailable;
+      if (frameRate <= 0) return "Target frame rate must be positive.";
+      const frameBudget = 1000 / frameRate;
+      const plannedMs = renderMs + cpuMs + otherMs;
+      const headroom = frameBudget - plannedMs;
+      return [
+        `Frame budget: ${number(frameBudget)} ms`,
+        `Planned work: ${number(plannedMs)} ms`,
+        `Remaining headroom: ${number(headroom)} ms`,
+        headroom >= 0
+          ? "Frame budget check: the entered work fits inside the frame budget."
+          : `Frame budget check: planned work exceeds the target by ${number(Math.abs(headroom))} ms.`,
+        "Actual CPU/GPU parallelism, driver overhead, reprojection, and thermal limits vary by device.",
+      ].join("\n");
+    },
+  },
+  "edge-computing": {
+    title: "Edge capacity estimator",
+    description:
+      "Estimate edge-node request capacity and storage runway from traffic and retention inputs.",
+    fields: [
+      numberField("requestsPerSecond", "Requests per second", "250", 0, undefined, 1),
+      numberField("requestsPerNode", "Sustained capacity per node", "400", 1, undefined, 1),
+      numberField("payloadKb", "Average payload (KB)", "80", 0, undefined, 0.1),
+      numberField("storageGb", "Local storage (GB)", "500", 0, undefined, 1),
+    ],
+    calculate: (values) => {
+      const requestsPerSecond = value(values, "requestsPerSecond");
+      const requestsPerNode = value(values, "requestsPerNode");
+      const payloadKb = value(values, "payloadKb");
+      const storageGb = value(values, "storageGb");
+      if (![requestsPerSecond, requestsPerNode, payloadKb, storageGb].every((item) => Number.isFinite(item) && item >= 0)) return unavailable;
+      if (requestsPerNode <= 0) return "Sustained capacity per node must be positive.";
+      const requiredNodes = Math.ceil(requestsPerSecond / requestsPerNode);
+      const dailyWriteGb = requestsPerSecond * payloadKb * 86400 / 1e6;
+      const storageDays = dailyWriteGb === 0 ? Infinity : storageGb / dailyWriteGb;
+      return [
+        `Minimum node count: ${number(requiredNodes, 0)} nodes`,
+        `Aggregate configured capacity: ${number(requiredNodes * requestsPerNode, 0)} requests/second`,
+        `Estimated daily write volume: ${number(dailyWriteGb)} GB/day`,
+        storageDays === Infinity
+          ? "Local storage runway: unlimited for zero write volume"
+          : `Local storage runway: ${number(storageDays)} days`,
+        "Estimate ignores data compression, replicas, cache churn, retries, maintenance, and failover reserve.",
+      ].join("\n");
+    },
+  },
+  "devops": {
+    title: "Reliability budget calculator",
+    description:
+      "Convert an availability target into an allowed downtime budget for a selected period.",
+    fields: [
+      numberField("availability", "Availability target (%)", "99.9", 0, 100, 0.001),
+      numberField("periodDays", "Period (days)", "30", 1, undefined, 1),
+    ],
+    calculate: (values) => {
+      const availability = value(values, "availability");
+      const periodDays = value(values, "periodDays");
+      if (![availability, periodDays].every((item) => Number.isFinite(item) && item >= 0)) return unavailable;
+      if (availability > 100 || periodDays <= 0) return "Availability must be at most 100%, and period must be positive.";
+      const minutes = periodDays * 24 * 60;
+      const downtimeMinutes = minutes * (1 - availability / 100);
+      const hours = downtimeMinutes / 60;
+      return [
+        `Period: ${number(periodDays, 0)} days`,
+        `Availability target: ${number(availability)}%`,
+        `Allowed downtime: ${number(downtimeMinutes)} minutes`,
+        `Allowed downtime: ${number(hours)} hours`,
+        "Use an explicit monitoring, service, and exclusion policy before turning this estimate into an operational objective.",
+      ].join("\n");
+    },
+  },
+  "saas-management": {
+    title: "SaaS license cost planner",
+    description:
+      "Estimate monthly and annual subscription spend, including inactive licenses and growth.",
+    fields: [
+      numberField("licenses", "Paid licenses", "250"),
+      numberField("price", "Monthly price per license ($)", "18", 0, undefined, 0.01),
+      numberField("unused", "Unused or inactive licenses (%)", "8", 0, 100, 0.1),
+      numberField("growth", "Expected annual growth (%)", "10", 0, undefined, 0.1),
+    ],
+    calculate: (values) => {
+      const licenses = value(values, "licenses");
+      const price = value(values, "price");
+      const unused = value(values, "unused");
+      const growth = value(values, "growth");
+      if (![licenses, price, unused, growth].every((item) => Number.isFinite(item) && item >= 0)) return unavailable;
+      if (unused > 100) return "Unused or inactive licenses must be at most 100%.";
+      const waste = licenses * unused / 100;
+      const currentMonthly = licenses * price;
+      const recoverableWaste = waste * price;
+      const nextYearMonthly = licenses * (1 + growth / 100) * price;
+      return [
+        `Estimated inactive licenses: ${number(waste)} of ${number(licenses, 0)}`,
+        `Current monthly spend: ${usd(currentMonthly)}`,
+        `Potential monthly inactive-license waste: ${usd(recoverableWaste)}`,
+        `Next-year monthly spend estimate: ${usd(nextYearMonthly)}`,
+        `Next-year annual spend estimate: ${usd(nextYearMonthly * 12)}`,
+      ].join("\n");
+    },
+  },
+  "telecommunications": {
+    title: "Wireless link budget planner",
+    description:
+      "Estimate theoretical link capacity from bandwidth and signal quality.",
+    fields: [
+      numberField("bandwidth", "Channel bandwidth (MHz)", "20", 0.1, undefined, 0.1),
+      numberField("spectralEfficiency", "Spectral efficiency (bits/Hz/s)", "3", 0.1, undefined, 0.1),
+      numberField("sectorLoad", "Target sector load (%)", "70", 1, 100, 0.1),
+    ],
+    calculate: (values) => {
+      const bandwidth = value(values, "bandwidth");
+      const spectralEfficiency = value(values, "spectralEfficiency");
+      const sectorLoad = value(values, "sectorLoad");
+      if (![bandwidth, spectralEfficiency, sectorLoad].every((item) => Number.isFinite(item) && item > 0)) return unavailable;
+      if (sectorLoad > 100) return "Target sector load must be at most 100%.";
+      const theoreticalMbps = bandwidth * spectralEfficiency;
+      const plannedMbps = theoreticalMbps * sectorLoad / 100;
+      return [
+        `Theoretical sector capacity: ${number(theoreticalMbps)} Mbps`,
+        `Capacity at ${number(sectorLoad)}% load: ${number(plannedMbps)} Mbps`,
+        `Load reserve: ${number(theoreticalMbps - plannedMbps)} Mbps`,
+        "Estimate applies Shannon-style proportional capacity, not a carrier-specific maximum; timing, modulation, coding, interference, and overhead determine real throughput.",
+      ].join("\n");
+    },
+  },
 };
 
 function initialValues(fields: Field[]): Record<string, string> {
