@@ -23,6 +23,10 @@ An integrated technology workspace delivered across 10 stages. The project inclu
 
 ![Cross-module workflow execution preview](apps/web/public/workflow-workbench-screenshot.png)
 
+## GitHub repository preview
+
+![TECHVERSE-30 repository README and file overview](apps/web/public/github-repository-screenshot.png)
+
 ## Release status
 
 Stages 1–9 are complete. Stage 10 is active for final optimization, accessibility,
