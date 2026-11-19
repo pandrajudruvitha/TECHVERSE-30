@@ -11,6 +11,10 @@ An integrated technology workspace delivered across 10 stages. Stages 1–5 prov
 
 ![OMNIVERSE AI dashboard showing the technology directory and connected API](apps/web/public/dashboard-screenshot.png)
 
+## Industry workspace preview
+
+![Healthcare industry workspace with searchable subindustries](apps/web/public/industry-workspace-screenshot.png)
+
 ## Architecture
 
 ```text

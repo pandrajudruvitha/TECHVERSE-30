@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -58,7 +59,10 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import { industryModules, type IndustryModule } from "@/data/industries";
+import {
+  industryModules,
+  type IndustryModule,
+} from "@/data/industries";
 import {
   categoryColors,
   categoryCounts,
@@ -156,6 +160,7 @@ function EmptyProjects() {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -250,6 +255,7 @@ export default function Home() {
       `industry:${industry.id}`,
       ...current.filter((id) => id !== `industry:${industry.id}`),
     ].slice(0, 8));
+    router.push(`/industries/${industry.id}`);
   };
 
   const toggleFavorite = (id: string) => {
@@ -970,7 +976,7 @@ export default function Home() {
                   <strong>{selectedIndustry.name}</strong>
                   <small>
                     {selectedIndustry.subindustryCount > 0
-                      ? `${selectedIndustry.subindustryCount} cataloged subindustries · industry workspace planned`
+                      ? `${selectedIndustry.subindustryCount} cataloged subindustries · open workspace available`
                       : "Frontier concepts require maturity labelling · no real capability is implied"}
                   </small>
                 </span>
