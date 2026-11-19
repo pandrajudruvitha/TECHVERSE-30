@@ -76,6 +76,29 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  transform: translateY(-140%);
+  border: 1px solid rgba(102, 223, 237, 0.42);
+  border-radius: 6px;
+  background: #111725;
+  color: #e5fbff;
+  padding: 9px 12px;
+  text-decoration: none;
+  transition: transform 0.16s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.main-column:focus {
+  outline: none;
+}
+
 ::selection {
   background: rgba(125, 118, 226, 0.42);
   color: #fff;

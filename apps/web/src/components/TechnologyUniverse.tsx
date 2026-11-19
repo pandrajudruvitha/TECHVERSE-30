@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Line, OrbitControls } from "@react-three/drei";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Group, Mesh } from "three";
 import {
   categoryColors,
@@ -24,7 +24,7 @@ function modulePosition(index: number) {
   ] as [number, number, number];
 }
 
-function UniverseScene() {
+function UniverseScene({ reducedMotion }: { reducedMotion: boolean }) {
   const group = useRef<Group>(null);
   const core = useRef<Mesh>(null);
   const connections = useMemo(
@@ -38,6 +38,7 @@ function UniverseScene() {
   );
 
   useFrame((state, delta) => {
+    if (reducedMotion) return;
     if (group.current) group.current.rotation.y += delta * 0.045;
     if (core.current) {
       core.current.rotation.y += delta * 0.12;
@@ -97,23 +98,34 @@ function UniverseScene() {
 }
 
 export default function TechnologyUniverse() {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setReducedMotion(media.matches);
+    updatePreference();
+    media.addEventListener("change", updatePreference);
+    return () => media.removeEventListener("change", updatePreference);
+  }, []);
+
   return (
     <Canvas
       aria-hidden="true"
       camera={{ position: [0, 0, 5.8], fov: 36 }}
       dpr={[1, 1.5]}
+      frameloop={reducedMotion ? "demand" : "always"}
       gl={{ alpha: true, antialias: true }}
       fallback={<div className="universe-fallback" aria-hidden="true" />}
       onCreated={({ gl }) => gl.setClearColor("#080b14", 0)}
     >
-      <UniverseScene />
+      <UniverseScene reducedMotion={reducedMotion} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
         minPolarAngle={Math.PI * 0.3}
         maxPolarAngle={Math.PI * 0.7}
         rotateSpeed={0.36}
-        autoRotate
+        autoRotate={!reducedMotion}
         autoRotateSpeed={0.33}
       />
     </Canvas>

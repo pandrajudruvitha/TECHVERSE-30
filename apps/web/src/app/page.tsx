@@ -546,7 +546,7 @@ export default function Home() {
             {!sidebarCollapsed && (
               <span>
                 <strong>Stage 10 of 10</strong>
-                <small>Optimization & deployment · active</small>
+                <small>Optimization & deployment · complete</small>
               </span>
             )}
           </div>
@@ -566,7 +566,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="main-column" id="overview">
+      <div className="main-column" id="main-content" tabIndex={-1}>
         <header className="topbar">
           <div className="topbar-left">
             <button

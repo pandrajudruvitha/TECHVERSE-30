@@ -1,5 +1,20 @@
 # Changelog
 
+## Stage 10 - 2026-11-19
+
+### Added
+
+- Reduced-motion support for the 3D technology universe
+- A keyboard-accessible skip-to-main-content link
+- Explicit Stage 10 complete status across the dashboard and project documentation
+
+### Verified
+
+- Frontend ESLint passes
+- Frontend production build passes
+- 16 API tests pass
+- Browser accessibility smoke check for skip navigation passes
+
 ## Stage 5–10 - 2026-11-19
 
 ### Added

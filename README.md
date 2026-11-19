@@ -29,8 +29,9 @@ An integrated technology workspace delivered across 10 stages. The project inclu
 
 ## Release status
 
-Stages 1–9 are complete. Stage 10 is active for final optimization, accessibility,
-performance, deployment quality gates, and production operations.
+All 10 stages are complete. Stage 10 includes 3D rendering optimization,
+reduced-motion support, responsive navigation, skip navigation, deployment quality
+gates, and production operations.
 
 ## Architecture
 
@@ -183,4 +184,4 @@ Stages 1–9 are complete in this repository. Stage 10 is active and is marked c
 | 7. Central OMNI AI agent | Browser-local demo routing, provider-backed chat, approval tasks, task states, and browser-persistent task history. | Complete |
 | 8. Integrations and automation | Cross-module workflow templates, status snapshots, run context, saved local runs, and the integration workbench. | Complete |
 | 9. Database, security, and testing | Persisted accounts and assets, signed bearer authentication, security middleware, and the 16-test API baseline. | Complete |
-| 10. Deployment and documentation | Container deployment, CI automation, environment guidance, preview images, and final production quality gates. | In progress |
+| 10. Deployment and documentation | Container deployment, CI automation, environment guidance, preview images, optimization, and production quality gates. | Complete |

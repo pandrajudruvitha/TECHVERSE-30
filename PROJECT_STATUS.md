@@ -66,9 +66,9 @@ is preserved.
 
 ## Current Stage
 
-Stage 10 is in progress: retain deployment documentation and container support while
-finishing 3D rendering optimization, responsive/accessibility checks, and production
-quality gates.
+Stage 10 is complete: deployment documentation, container support, responsive
+navigation, skip navigation, reduced-motion support, and production quality gates are
+implemented and verified.
 
 ## Baseline Checks
 
