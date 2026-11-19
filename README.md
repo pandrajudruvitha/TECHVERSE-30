@@ -23,6 +23,11 @@ An integrated technology workspace delivered across 10 stages. Stages 1–5 prov
 
 ![Cross-module workflow execution preview](apps/web/public/workflow-workbench-screenshot.png)
 
+## Release status
+
+Stages 1–9 are complete. Stage 10 is active for final optimization, accessibility,
+performance, deployment quality gates, and production operations.
+
 ## Architecture
 
 ```text

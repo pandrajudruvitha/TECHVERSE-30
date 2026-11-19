@@ -545,8 +545,8 @@ export default function Home() {
             <span className="roadmap-status" />
             {!sidebarCollapsed && (
               <span>
-                <strong>Stage 4 of 10</strong>
-                <small>Technology universe · complete</small>
+                <strong>Stage 10 of 10</strong>
+                <small>Optimization & deployment · active</small>
               </span>
             )}
           </div>
@@ -581,7 +581,7 @@ export default function Home() {
               <ChevronRight size={13} />
               <strong>Overview</strong>
             </div>
-            <span className="topbar-stage">STAGE 4</span>
+            <span className="topbar-stage">STAGE 10</span>
           </div>
 
           <div className="topbar-actions">

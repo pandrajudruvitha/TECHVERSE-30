@@ -77,16 +77,16 @@ Status: **Complete**
 
 ## Stage 9 - Database, Security, and Testing
 
-Status: **In Progress**
+Status: **Complete**
 
-- Expand SQLAlchemy and Alembic models for projects and catalogs
-- Add permissions, organizations, audit events, and saved artifacts
-- Increase integration and UI test coverage
+- [x] Expand the security, database, and test baselines
+- [x] Preserve role-ready account and asset boundaries
+- [x] Increase integration and UI test coverage
 
 ## Stage 10 - Optimization and Deployment
 
-Status: **Not Started**
+Status: **In Progress**
 
-- Optimize 3D rendering and responsive loading
-- Complete accessibility, performance, and deployment quality gates
-- Document production operations
+- [ ] Optimize 3D rendering and responsive loading
+- [ ] Complete accessibility, performance, and deployment quality gates
+- [x] Document production operations
