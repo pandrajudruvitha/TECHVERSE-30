@@ -37,6 +37,10 @@ is preserved.
 - CORS allowlist, security headers, body limits, route cache controls, and rate limits
 - Docker and local deployment configuration
 - Automated frontend lint/build and API tests
+- 20-industry routed catalog and reusable industry workspaces
+- Education, administrative, simulation, and integration industry modes
+- Browser-local OMNI task approval and task-history tracking
+- Browser-persistent cross-module workflow summaries
 
 ## Implemented Status
 
@@ -60,20 +64,11 @@ is preserved.
 | Central OMNI AI demo | Implemented / Tested |
 | Cross-module workflow workbench | Implemented / Tested |
 
-## Stage 1 Inspection Findings
+## Current Stage
 
-1. The API test suite passes with 16 tests after installing declared dependencies.
-2. Frontend lint and production build pass.
-3. The application has no dedicated 2D routes for technology modules; modules are selected
-   inside the dashboard workbench.
-4. The current AI endpoint is provider-backed but has no local demo fallback.
-5. Project persistence is not implemented; one UI surface reports this correctly.
-6. The database currently models only users and assets.
-7. Redis is declared but no application queue or cache behavior exists.
-8. CSRF is not required for the current bearer-token browser model, but security
-   requirements should be re-evaluated if cookie sessions are introduced.
-9. The Central AI UI does not route by industry or create tracked tasks.
-10. The `LLM_API_KEY` remains backend-only, which should be preserved.
+Stage 10 is in progress: retain deployment documentation and container support while
+finishing 3D rendering optimization, responsive/accessibility checks, and production
+quality gates.
 
 ## Baseline Checks
 

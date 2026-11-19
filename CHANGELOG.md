@@ -1,5 +1,22 @@
 # Changelog
 
+## Stage 5–10 - 2026-11-19
+
+### Added
+
+- 20 routed industry universes with searchable subindustry catalogs
+- Shared education, administrative, simulation, and integration industry workspace modes
+- OMNI AI approval tasks and browser-persistent task history
+- Cross-module workflow run summaries
+- Verified dashboard, industry, OMNI AI, and workflow screenshot previews
+- Stage 10 active status for final optimization and production quality gates
+
+### Verified
+
+- Frontend ESLint passes
+- Frontend production build passes
+- 16 API tests pass
+
 ## Stage 3 - 2026-11-18
 
 ### Added
