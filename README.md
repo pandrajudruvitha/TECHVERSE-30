@@ -15,6 +15,10 @@ An integrated technology workspace delivered across 10 stages. Stages 1–5 prov
 
 ![Healthcare industry workspace with searchable subindustries](apps/web/public/industry-workspace-screenshot.png)
 
+## OMNI AI demo preview
+
+![OMNI AI browser-local demo response](apps/web/public/omni-ai-demo-screenshot.png)
+
 ## Architecture
 
 ```text
