@@ -2318,6 +2318,44 @@ button.category-link {
   font-size: 9px;
 }
 
+.industry-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.industry-mode-grid button {
+  margin-top: 0;
+  border-radius: 6px;
+}
+
+.industry-mode-grid .industry-mode-active {
+  border-color: rgba(156, 135, 255, 0.42);
+  background: rgba(156, 135, 255, 0.11);
+  color: #ddd8ff;
+}
+
+.industry-action-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.industry-action-row button {
+  margin-top: 0;
+}
+
+.industry-plan-panel ol {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #adb4c8;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
 .related-industry-links {
   display: flex;
   flex-wrap: wrap;
