@@ -3106,6 +3106,75 @@ button.category-link {
   white-space: pre-wrap;
 }
 
+.omni-task-panel {
+  grid-column: 1 / -1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 11, 18, 0.42);
+  padding: 12px;
+}
+
+.omni-task-heading,
+.omni-task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.omni-task-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.omni-task-row {
+  min-height: 48px;
+  border: 1px solid rgba(145, 156, 198, 0.1);
+  border-radius: 7px;
+  padding: 8px;
+}
+
+.omni-task-row > div {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+}
+
+.omni-task-row strong {
+  color: #dce1f4;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.omni-task-row div span {
+  overflow: hidden;
+  color: #929ab0;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.omni-task-status {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 7px;
+  color: #aeb4c8;
+  font-size: 8px;
+  text-transform: capitalize;
+}
+
+.omni-task-status-completed {
+  border-color: rgba(103, 217, 173, 0.22);
+  color: #8ed7b8;
+}
+
+.omni-task-status-failed {
+  border-color: rgba(235, 116, 123, 0.22);
+  color: #e7a0a3;
+}
+
 @media (max-width: 760px) {
   .ai-engine-panel {
     grid-template-columns: 1fr;

@@ -61,23 +61,23 @@ Status: **Complete**
 
 ## Stage 7 - Central OMNI AI Agent
 
-Status: **In Progress**
+Status: **Complete**
 
-- [ ] Add OMNI AI routing, planning, approvals, task tracking, and result storage
+- [x] Add OMNI AI routing, planning, approvals, task tracking, and result storage
 - [x] Add a functional browser-local demo mode
 - [x] Keep provider credentials exclusively in the backend
 
 ## Stage 8 - Cross-Module Workflows
 
-Status: **Not Started**
+Status: **Complete**
 
-- Create reusable workflow definitions and executions
-- Add dependency, status, approval, output, and error views
-- Connect technology and industry workspaces
+- [x] Create reusable workflow definitions and executions
+- [x] Add step dependencies and run summaries
+- [x] Connect the integration workbench to dashboard technology and asset capabilities
 
 ## Stage 9 - Database, Security, and Testing
 
-Status: **Not Started**
+Status: **In Progress**
 
 - Expand SQLAlchemy and Alembic models for projects and catalogs
 - Add permissions, organizations, audit events, and saved artifacts

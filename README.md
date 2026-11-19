@@ -19,6 +19,10 @@ An integrated technology workspace delivered across 10 stages. Stages 1–5 prov
 
 ![OMNI AI browser-local demo response](apps/web/public/omni-ai-demo-screenshot.png)
 
+## Workflow workbench preview
+
+![Cross-module workflow execution preview](apps/web/public/workflow-workbench-screenshot.png)
+
 ## Architecture
 
 ```text
